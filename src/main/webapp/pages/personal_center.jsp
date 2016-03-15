@@ -6,6 +6,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path=request.getContextPath();
+    String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
 <html>
 <head>
     <title>丘比特天天在线</title>
@@ -47,8 +52,9 @@
 <body>
     <div>
         <%--上部分个人图片--%>
+        <%--<h1><%=basePath%></h1>--%>
         <div>
-            <img src="/resources/img/person.jpg" alt="个人图片" class="img-rounded" width="100%" height="180px" >
+            <img src="<%=basePath%>resources/img/person.jpg" alt="个人图片" class="img-rounded" width="100%" height="180px" >
         </div>
             <%--导航栏--%>
         <div width="100%" >

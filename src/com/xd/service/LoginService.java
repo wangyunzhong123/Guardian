@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 @Service("loginService")
 public class LoginService {
 
-    @Resource(name="LoginDao")
+    @Resource(name="loginDao")
     LoginDao userDao;
 
 }
