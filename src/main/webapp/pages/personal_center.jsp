@@ -37,7 +37,7 @@
         .tab1_edit{float: right;padding-right: 10%}
         .line_begin{padding: 0px 15px 15px 15px;}
 
-        .tab1_ul li{height:40px;width: 100%;line-height: 40px;font-size: 16px;font-family: Arial,"微软雅黑",Helvetica,sans-serif}
+        .tab1_ul li{list-style-type:none;height:40px;width: 100%;line-height: 40px;font-size: 16px;font-family: Arial,"微软雅黑",Helvetica,sans-serif}
 
         .line_begin_1{margin-left: 15px;margin-right: 15px;}
         .line_begin_2{width: 100%;-moz-box-pack: center;-webkit-box-pack: center;margin-top: 20px;margin-bottom: 20px;margin-left: auto;margin-right: auto}
@@ -48,7 +48,7 @@
     <div>
         <%--上部分个人图片--%>
         <div>
-            <img src="../resources/img/person.jpg" alt="个人图片" class="img-rounded" width="100%" height="180px" >
+            <img src="..//resources/img/person.jpg" alt="个人图片" class="img-rounded" width="100%" height="180px" >
         </div>
             <%--导航栏--%>
         <div width="100%" >
