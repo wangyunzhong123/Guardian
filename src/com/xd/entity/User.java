@@ -1,10 +1,7 @@
 package com.xd.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by tianxi on 16-3-15.
@@ -17,6 +14,7 @@ import javax.persistence.Table;
 public class User {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="userid")
     private Integer id;
 
