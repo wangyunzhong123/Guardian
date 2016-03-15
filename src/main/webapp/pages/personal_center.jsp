@@ -48,7 +48,7 @@
     <div>
         <%--上部分个人图片--%>
         <div>
-            <img src="..//resources/img/person.jpg" alt="个人图片" class="img-rounded" width="100%" height="180px" >
+            <img src="/resources/img/person.jpg" alt="个人图片" class="img-rounded" width="100%" height="180px" >
         </div>
             <%--导航栏--%>
         <div width="100%" >
@@ -207,6 +207,9 @@
     </div>
 </body>
 <script type="text/javascript">
+    $(function(){
+        $(document.getElementById("tab2")).hide();
+    })
     function tab_change(which){
         var $tabs = $("li");
         var ul_button0 = $tabs[0];
