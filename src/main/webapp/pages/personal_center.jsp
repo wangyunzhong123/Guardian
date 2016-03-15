@@ -1,3 +1,5 @@
+<%@ page import="com.xd.entity.User" %>
+<%@ page import="com.xd.entity.User_to" %>
 <%--
   Created by IntelliJ IDEA.
   User: tianxi
@@ -6,6 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>--%>
 <%
     String path=request.getContextPath();
     String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -26,13 +29,16 @@
     <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- 可选的Bootstrap主题文件（一般不使用） -->
-    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap-theme.min.css"></script>
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap-theme.min.css" rel="stylesheet">
 
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
     <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
 
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+    <link href="<%=basePath%>resources/css/weui.min.css" rel="stylesheet">
+
 
     <style type="text/css">
         .cate_tab{-moz-box-pack: justify;-webkit-box-pack: justify;-webkit-box-lines: single|multiple}
@@ -46,7 +52,7 @@
         .tab1_ul li{list-style-type:none;height:40px;width: 100%;line-height: 40px;font-size: 16px;font-family: Arial,"微软雅黑",Helvetica,sans-serif}
 
         .line_begin_1{margin-left: 15px;margin-right: 15px;}
-        .line_begin_2{width: 100%;-moz-box-pack: center;-webkit-box-pack: center;margin-top: 20px;margin-bottom: 20px;margin-left: auto;margin-right: auto}
+        .line_begin_2{width: 180px;-moz-box-pack: center;-webkit-box-pack: center;margin-left: auto;margin-right: auto;margin-top: 15px;}
     </style>
 
 </head>
@@ -65,150 +71,172 @@
                 <li id="li_2" ><a href="#"  onclick="tab_change(2)">我问你答</a></li>
             </ul>
         </div>
-        <%--下面内容区--%>
-        <div id=tab1 width="100%" class="tab1">
-            <%--姓名--%>
-            <div width="100%" height="20px">
 
+         <%--tab1--%>
+         <%
+             User user = (User)session.getAttribute("user");
+         %>
+        <div id=tab1 class="weui_cells">
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>性别</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user.getSex()%>
+                </div>
             </div>
-            <ul class="tab1_ul">
-                <li  >
-                    <span class="line_begin">姓名:</span>
-                    <span id="name" >王二小</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">出生日期:</span>
-                    <span id="birth" >1989-12-12</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">身高:</span>
-                    <span id="height" >186cm</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">学历:</span>
-                    <span id="level" >硕士</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">职业:</span>
-                    <span id="career" >工程师</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">收入:</span>
-                    <span id="income" >10000~15000</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">居住地:</span>
-                    <span id="address" >北京</span>
-                    <%--<img src="">--%>
-                    <span class="line_begin">籍贯:</span>
-                    <span id="locate" >山东</span>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin" >内心独白:</span>
-                </li>
-            </ul>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>出生日期</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user.getBirth()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>身高</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user.getHeight()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>学历</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user.getEducation()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>职业</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user.getCareer()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>收入</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user.getIncome()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>居住地</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user.getAddress()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>籍贯</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user.getLocate()%>
+                </div>
+            </div>
 
+            <span class="line_begin" >内心独白:</span>
             <div width="100%" >
-                <textarea type="text" class="form-control line_begin_1 " rows=6 placeholder="填写内心独白" ></textarea>
+                <textarea type="text" class="form-control line_begin_1 " rows=6 placeholder="填写内心独白" ><%=user.getDubai()%></textarea>
             </div>
+
+            <div class="line_begin_2">
+                <%--<button type="button" width="50%" class="btn btn-primary">--%>
+                    <%--编辑修改--%>
+                <%--</button>--%>
+                <a href="<%=basePath%>pages/edit_personalinfo.jsp" class="weui_btn weui_btn_primary">编辑修改</a>
+
+            </div>
+
         </div>
 
 
 
-        <%--tab2--%>
-        <div id=tab2 width="100%" class="tab1">
-            <%--姓名--%>
-            <div width="100%" height="20px">
-
+          <%--tab2--%>
+         <%
+             User_to user_to = (User_to)session.getAttribute("user_to");
+         %>
+        <div id=tab2 class="weui_cells">
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>年龄</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user_to.getAge()%>
+                </div>
             </div>
-            <ul class="tab1_ul">
-                <li  >
-                    <span class="line_begin">年龄:</span>
-                    <span id="tab2_age" >1975~1988</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">身高:</span>
-                    <span id="tab2_height" >170cm~185cm</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">学历:</span>
-                    <span id="tab2_level" >硕士</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">收入:</span>
-                    <span id="tab2_income" >10000~15000</span>
-                    <%--<img src="">--%>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin">居住地:</span>
-                    <span id="tab2_address" >北京</span>
-                    <%--<img src="">--%>
-                    <span class="line_begin">籍贯:</span>
-                    <span id="tab2_locate" >山东</span>
-                    <button type="button" class="btn btn-primary tab1_edit">
-                        编辑
-                    </button>
-                </li>
-                <li >
-                    <span class="line_begin" >想对他/她说:</span>
-                </li>
-            </ul>
-                <%--对她说--%>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>身高</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user_to.getHeight()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>学历</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user_to.getEducation()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>收入</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user_to.getIncome()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>居住地</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user_to.getAddress()%>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>籍贯</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <%=user_to.getLocate()%>
+                </div>
+            </div>
+            <span class="line_begin" >对他/她说:</span>
             <div width="100%" >
-                <textarea type="text" class="form-control line_begin_1 " rows=4 placeholder="想对她/他说..." ></textarea>
+                <textarea type="text" class="form-control line_begin_1 " rows=6 placeholder="想对他说..." ><%=user_to.getTell_to()%></textarea>
             </div>
+
+            <div class="line_begin_2">
+                <%--<button type="button" width="50%" class="btn btn-primary">--%>
+                    <%--编辑修改--%>
+                <%--</button>--%>
+                <a href="javascript:;" class="weui_btn weui_btn_primary">编辑修改</a>
+            </div>
+
+
         </div>
 
-        <%--tab3--%>
+
 
         <%--自我推广按钮--%>
         <div class="line_begin_2">
-            <button type="button" width="50%" class="btn btn-primary">
-                自我推广
-            </button>
+            <%--<button type="button" width="50%" class="btn btn-primary">--%>
+                <%--自我推广--%>
+            <%--</button>--%>
+             <a href="javascript:;" class="weui_btn weui_btn_disabled weui_btn_primary">自我推广</a>
         </div>
+
 
 
     </div>

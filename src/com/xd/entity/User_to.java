@@ -1,9 +1,6 @@
 package com.xd.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by tianxi on 16-3-15.
@@ -17,6 +14,7 @@ import javax.persistence.Table;
 public class User_to {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="id")
     private Integer id;
 
@@ -104,5 +102,16 @@ public class User_to {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public User_to(String age, String height, String education, String income,
+                   String address, String locate, String tell_to) {
+        this.age = age;
+        this.height = height;
+        this.education = education;
+        this.income = income;
+        this.address = address;
+        this.locate = locate;
+        this.tell_to = tell_to;
     }
 }

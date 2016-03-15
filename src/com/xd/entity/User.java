@@ -24,6 +24,9 @@ public class User {
     @Column(name="password")
     private String password;
 
+    @Column(name="sex")
+    private String sex;
+
     @Column(name="birth")
     private String birth;
 
@@ -134,6 +137,31 @@ public class User {
     }
 
     public void setDubai(String dubai) {
+        this.dubai = dubai;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+
+    public User(String name, String password, String sex, String birth,
+                String height, String education, String career, String income,
+                String address, String locate, String dubai) {
+        this.name = name;
+        this.password = password;
+        this.sex = sex;
+        this.birth = birth;
+        this.height = height;
+        this.education = education;
+        this.career = career;
+        this.income = income;
+        this.address = address;
+        this.locate = locate;
         this.dubai = dubai;
     }
 }

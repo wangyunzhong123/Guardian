@@ -53,6 +53,7 @@
           <element id="library" level="project" name="Maven: commons-dbcp:commons-dbcp:1.4" />
           <element id="library" level="project" name="Maven: commons-pool:commons-pool:1.5.4" />
           <element id="library" level="project" name="mysql-connector-java-5.0.8-bin" />
+          <element id="library" level="project" name="jstl" />
         </element>
         <element id="file-copy" path="$PROJECT_DIR$/src/main/webapp/WEB-INF/applicationContext.xml" />
         <element id="file-copy" path="$PROJECT_DIR$/src/main/webapp/WEB-INF/hibernate.properties" />
