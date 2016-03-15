@@ -18,7 +18,7 @@
     <context:component-scan base-package="com.xd" />
     <mvc:annotation-driven />
     <context:property-placeholder location="/WEB-INF/hibernate.properties" />
-    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="resources/**" location="/WEB-INF/resources/"/>
 
     <!--定义视图-->
     <bean id ="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">

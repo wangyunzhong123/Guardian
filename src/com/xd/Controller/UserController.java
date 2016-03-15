@@ -30,7 +30,7 @@ public class UserController {
         request.setCharacterEncoding("utf-8");//@RequestBody ProductComp aa,
         response.setCharacterEncoding("utf-8");
 //        xssfilter(aa);//过滤非法字符
-        /*添加成功后返回一个新的页面，页面显示最新的信息*/
+        /*添加成功后返回一个新的页面，jsp页面显示最新的信息*/
     }
 
 
