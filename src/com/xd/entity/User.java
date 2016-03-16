@@ -164,4 +164,7 @@ public class User {
         this.locate = locate;
         this.dubai = dubai;
     }
+
+    public User() {
+    }
 }

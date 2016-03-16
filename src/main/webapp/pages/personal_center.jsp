@@ -75,6 +75,8 @@
          <%--tab1--%>
          <%
              User user = (User)session.getAttribute("user");
+
+
          %>
         <div id=tab1 class="weui_cells">
             <div class="weui_cell">
@@ -169,7 +171,10 @@
                     <p>年龄</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user_to.getAge()%>
+                    <%=user_to.getAge_start()%>
+                </div>---
+                <div class="weui_cell_ft">
+                    <%=user_to.getAge_end()%>
                 </div>
             </div>
             <div class="weui_cell">
@@ -177,7 +182,10 @@
                     <p>身高</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user_to.getHeight()%>
+                    <%=user_to.getHeight_start()%>
+                </div>---
+                <div class="weui_cell_ft">
+                    <%=user_to.getHeight_end()%>
                 </div>
             </div>
             <div class="weui_cell">
@@ -193,7 +201,10 @@
                     <p>收入</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user_to.getIncome()%>
+                    <%=user_to.getIncome_start()%>
+                </div>---
+                <div class="weui_cell_ft">
+                    <%=user_to.getIncome_end()%>
                 </div>
             </div>
             <div class="weui_cell">
@@ -214,14 +225,14 @@
             </div>
             <span class="line_begin" >对他/她说:</span>
             <div width="100%" >
-                <textarea type="text" class="form-control line_begin_1 " rows=6 placeholder="想对他说..." ><%=user_to.getTell_to()%></textarea>
+                <textarea type="text" class="form-control line_begin_1 " readonly="readonly" rows=6 placeholder="想对他说..." ><%=user_to.getTell_to()%></textarea>
             </div>
 
             <div class="line_begin_2">
                 <%--<button type="button" width="50%" class="btn btn-primary">--%>
                     <%--编辑修改--%>
                 <%--</button>--%>
-                <a href="javascript:;" class="weui_btn weui_btn_primary">编辑修改</a>
+                    <a href="<%=basePath%>pages/edit_user_to.jsp" class="weui_btn weui_btn_primary">编辑修改</a>
             </div>
 
 

@@ -1,4 +1,4 @@
-<%@ page import="com.xd.entity.User" %><%--
+<%@ page import="com.xd.entity.User_to" %><%--
   Created by IntelliJ IDEA.
   User: tianxi
   Date: 16-3-15
@@ -54,37 +54,32 @@
 </head>
 <body>
 
-        <%
-            User user = (User)session.getAttribute("user");
+<%
+    User_to user_to = (User_to) session.getAttribute("user_to");
 
 
-        %>
+%>
 
-    <form action="/adduser" method="post">
+<form action="/adduser_to" method="post">
     <div class="weui_cells weui_cells_form">
-        <div class="weui_cell weui_cell_select">
-
-            <div class="weui_cell_bd weui_cell_primary">
-                <select class="weui_select" name="sex">
-                    <option value="0">选择性别</option>
-                    <option selected="" value="1">男</option>
-                    <option value="2">女</option>
-                </select>
-            </div>
-        </div>
 
         <div class="weui_cell">
-            <div class="weui_cell_hd"><label for="" class="weui_label">生日</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="date" name="birth" value=<%=user.getBirth()%>>
-            </div>
+            <div class="weui_cell_hd"><label for="" class="weui_label">年龄</label></div>
+            <%--<div class="weui_cell_bd weui_cell_primary">--%>
+                <%--<input class="weui_input" type="date" name="birth" value=<%=user.getBirth()%>>--%>
+            <%--</div>--%>
+            <input type="number" name="age_start" min="18" max="120" step="1" value=<%=user_to.getAge_start()%>/>---
+            <input type="number" name="age_end" min="18" max="120" step="1" value=<%=user_to.getAge_end()%>/>
+
         </div>
 
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">身高</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="number" name="height" placeholder=<%=user.getHeight()%>>
-            </div>
+            <%--<div class="weui_cell_bd weui_cell_primary">--%>
+                <%--<input class="weui_input" type="number" name="height" placeholder=<%=user.getHeight()%>>--%>
+            <%--</div>--%>
+            <input type="number" name="height_start" min="160" max="220" step="2" value=<%=user_to.getHeight_start()%>/>---
+            <input type="number" name="height_end" min="160" max="220" step="2" value=<%=user_to.getHeight_end()%>/>
         </div>
 
         <div class="weui_cell weui_cell_select">
@@ -104,30 +99,24 @@
         </div>
 
         <div class="weui_cell">
-            <div class="weui_cell_hd"><label class="weui_label">职业</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="text" name = "career" placeholder=<%=user.getCareer()%>>
-            </div>
-        </div>
-
-        <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">收入</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="number" name="income" placeholder=<%=user.getIncome()%>>
+                <input type="number" name="income_start" min="1000" max="100000" step="1000" value=<%=user_to.getIncome_start()%>/>---
+                <input type="number" name="income_end" min="1000" max="100000" step="1000" value=<%=user_to.getIncome_end()%>/>
             </div>
         </div>
 
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">居住地</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="text" name="address" placeholder=<%=user.getAddress()%>>
+                <input class="weui_input" type="text" name="address" placeholder=<%=user_to.getAddress()%>>
             </div>
         </div>
 
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">籍贯</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="text" name="locate" placeholder=<%=user.getLocate()%>>
+                <input class="weui_input" type="text" name="locate" placeholder=<%=user_to.getLocate()%>>
             </div>
         </div>
 
@@ -141,7 +130,7 @@
     <div class="weui_cells weui_cells_form">
         <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">
-                <textarea class="weui_textarea" name="dubai" placeholder="请输入想说的话..." rows="3"><%=user.getDubai()%></textarea>
+                <textarea class="weui_textarea" name="tell_to" placeholder="请输入想说的话..." rows="3"><%=user_to.getTell_to()%></textarea>
                 <div class="weui_textarea_counter"><span>0</span>/200</div>
             </div>
         </div>
@@ -152,9 +141,10 @@
         <%--编辑修改--%>
         <%--</button>--%>
         <input type="submit" class="weui_btn weui_btn_primary" />
+
     </div>
 
-    </form>
+</form>
 
 
 </body>
