@@ -48,7 +48,7 @@ public class UserController {
     }
 
 
-    /*新增用户to*/
+    /*新增用户to,,心仪对象实体*/
     @RequestMapping(value="adduser_to",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView AddUser_update_to(User_to user_to, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         request.setCharacterEncoding("utf-8");//@RequestBody ProductComp aa,
