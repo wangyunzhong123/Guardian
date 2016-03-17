@@ -85,6 +85,5 @@
     <orderEntry type="library" exported="" name="Maven: commons-pool:commons-pool:1.5.4" level="project" />
     <orderEntry type="library" exported="" name="jquery1.8.2" level="application" />
     <orderEntry type="library" exported="" name="mysql-connector-java-5.0.8-bin" level="project" />
-    <orderEntry type="library" name="jstl" level="project" />
   </component>
 </module>
