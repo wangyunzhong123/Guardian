@@ -38,5 +38,8 @@ public class LoginController {
         System.out.println("收到index请求");
         return new ModelAndView("pages/login");
     }
+    /**
+     *
+     */
 
 }
