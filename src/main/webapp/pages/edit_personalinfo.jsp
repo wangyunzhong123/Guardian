@@ -60,30 +60,30 @@
 
         %>
 
-    <form action="/adduser" method="post">
+    <form action="<%=basePath%>adduser" method="post">
     <div class="weui_cells weui_cells_form">
         <div class="weui_cell weui_cell_select">
 
             <div class="weui_cell_bd weui_cell_primary">
                 <select class="weui_select" name="sex">
                     <option value="0">选择性别</option>
-                    <option selected="" value="1">男</option>
-                    <option value="2">女</option>
+                    <option selected="" value="男">男</option>
+                    <option value="女">女</option>
                 </select>
             </div>
         </div>
 
         <div class="weui_cell">
-            <div class="weui_cell_hd"><label for="" class="weui_label">生日</label></div>
+            <div class="weui_cell_hd"><label class="weui_label">生日</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="date" name="birth" value=<%=user.getBirth()%>>
+                <input class="weui_input" type="date" name="birth" value=<%=user.getBirth()%> />
             </div>
         </div>
 
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">身高</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="number" name="height" placeholder=<%=user.getHeight()%>>
+                <input class="weui_input" type="number" name="height" placeholder=<%=user.getHeight()%> value=<%=user.getHeight()%> />
             </div>
         </div>
 
@@ -91,14 +91,14 @@
 
             <div class="weui_cell_bd weui_cell_primary">
                 <select class="weui_select" name="education">
-                    <option value="0">选择学历</option>
-                    <option value="1">小学</option>
-                    <option value="2">初中</option>
-                    <option value="3">高中</option>
-                    <option value="4">中专</option>
-                    <option value="5">大专</option>
-                    <option selected="" value="6">本科</option>
-                    <option value="7">研究生</option>
+                    <option value="选择学历">选择学历</option>
+                    <option value="小学">小学</option>
+                    <option value="初中">初中</option>
+                    <option value="高中">高中</option>
+                    <option value="中专">中专</option>
+                    <option value="大专">大专</option>
+                    <option selected="" value="本科">本科</option>
+                    <option value="研究生">研究生</option>
                 </select>
             </div>
         </div>
@@ -106,28 +106,28 @@
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">职业</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="text" name = "career" placeholder=<%=user.getCareer()%>>
+                <input class="weui_input" type="text" name = "career" placeholder=<%=user.getCareer()%> value=<%=user.getCareer()%> />
             </div>
         </div>
 
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">收入</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="number" name="income" placeholder=<%=user.getIncome()%>>
+                <input class="weui_input" type="number" name="income" placeholder=<%=user.getIncome()%> value=<%=user.getIncome()%> />
             </div>
         </div>
 
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">居住地</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="text" name="address" placeholder=<%=user.getAddress()%>>
+                <input class="weui_input" type="text" name="address" placeholder=<%=user.getAddress()%> value=<%=user.getAddress()%> />
             </div>
         </div>
 
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">籍贯</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="text" name="locate" placeholder=<%=user.getLocate()%>>
+                <input class="weui_input" type="text" name="locate" placeholder=<%=user.getLocate()%> value=<%=user.getLocate()%> />
             </div>
         </div>
 
