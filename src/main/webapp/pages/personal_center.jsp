@@ -8,7 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>--%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String path=request.getContextPath();
     String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -54,6 +54,16 @@
         .line_begin_1{margin-left: 15px;margin-right: 15px;}
         .line_begin_2{width: 180px;-moz-box-pack: center;-webkit-box-pack: center;margin-left: auto;margin-right: auto;margin-top: 15px;}
     </style>
+
+
+    <style type="text/css">
+        .tab3_question_title{font-size: larger;margin-left: 4%;margin-top: 20px;}
+        .tab3_question_answer{font-size: large;margin: 6%;align-content: center}
+        .tab3_question_img{width: 30px;height: 30px;}
+        .tab3_question_reanswer{float:right; margin-right: 6%;}
+        .tab3_add_question{float:right; margin-top: 4%; margin-right: 6%;width: 90px;}
+    </style>
+
 
 </head>
 <body>
@@ -241,7 +251,25 @@
 
 
         <%--tab3,,我问你答--%>
-
+        <div id="tab3">
+            <div>
+                <a href="javascript:;" class="tab3_add_question weui_btn weui_btn_mini weui_btn_primary">添加题目</a>
+            </div>
+            <br/>
+            <c:forEach items="${questionlist}" var="question" varStatus="vs">
+                    <div class="tab3_question_title">
+                        <header>${vs.index+1}. ${question.title}</header>
+                    </div>
+                    <div class="tab3_question_answer">
+                        <img src="<%=basePath%>resources/img/smile.jpg" alt="图标" class="tab3_question_img" />
+                        <span >${question.myanswer}</span>
+                        <div class="tab3_question_reanswer">
+                            <a href="<%=basePath%>editmyquestion?question_prim_id=${question.prim_id}"
+                               class="weui_btn weui_btn_mini weui_btn_primary">重答</a>
+                        </div>
+                    </div>
+             </c:forEach>
+        </div>
 
 
         <%--自我推广按钮--%>
@@ -259,6 +287,7 @@
 <script type="text/javascript">
     $(function(){
         $(document.getElementById("tab2")).hide();
+        $(document.getElementById("tab3")).hide();
     })
     function tab_change(which){
         var $tabs = $("li");
@@ -267,6 +296,7 @@
         var $ul_button2 = $tabs[2];
         var $tab1 = $(document.getElementById("tab1"));
         var $tab2 = $(document.getElementById("tab2"));
+        var $tab3 = $(document.getElementById("tab3"));
        // var $tab3 = $(document.getElementById("tab3"));
         switch(which){
             case 0:
@@ -275,18 +305,25 @@
 //                $ul_button2.removeClass("active");
                     $tab1.show();
                     $tab2.hide();
+                    $tab3.hide();
                 break;
             case 1:
 //                $ul_button1.addClass("active");
 //                $ul_button0.removeClass("active");
 //                $ul_button2.removeClass("active");
-                    $tab1.hide();
                     $tab2.show();
+                    $tab1.hide();
+                    $tab3.hide();
                 break;
             case 2:
-                $ul_button2.addClass("active");
-                $ul_button0.removeClass("active");
-                $ul_button1.removeClass("active");
+//                $ul_button2.addClass("active");
+//                $ul_button0.removeClass("active");
+//                $ul_button1.removeClass("active");
+
+                $tab3.show();
+                $tab1.hide();
+                $tab2.hide();
+
                 break;
             default:
                 break;
