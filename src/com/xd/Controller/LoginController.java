@@ -1,6 +1,7 @@
 package com.xd.Controller;
 
 import com.xd.service.LoginService;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,8 @@ import java.util.Map;
 @Controller
 public class LoginController {
 
+    private static final Logger logger = Logger.getLogger(LoginController.class);
+
     @Resource(name="loginService")
     LoginService loginService;
 
@@ -40,7 +43,13 @@ public class LoginController {
     @RequestMapping(value="index",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView testReturnUser1(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
         System.out.println("收到index请求");
+        logger.fatal("收到index请求");
         return new ModelAndView("pages/login");
+    }
+
+    @RequestMapping(value="toMainInterface",method={RequestMethod.POST,RequestMethod.GET})
+    public void toMainInterface(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+        System.out.println("收到toMainInterface请求");
     }
 
     /**
@@ -52,27 +61,39 @@ public class LoginController {
     @RequestMapping(value="weChatOauth",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView weChatOauth(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
         System.out.println("收到weChatOauth请求");
+        logger.fatal("收到weChatOauth请求");
         String code = request.getParameter("code");
         String state = request.getParameter("state");
+        logger.fatal("code:"+code);
+        logger.fatal("state:"+state);
         System.out.println("code="+code);
+        if (code.equals("authdeny")){
+            logger.fatal("用户未授权");
+            return null;
+        }
         Map<String, String> map = new HashMap<String, String>();
         map.put("code", code);
         map.put("appid", "wx698530e78c6c010a");
         map.put("secret", "f1413d92a240e3482153754c953eeab5");
         map.put("grant_type", "authorization_code");
         String result = sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", map);
+        System.out.println("access_token==="+result);
+        logger.fatal("access_token:"+result);
 
         JSONObject object = new JSONObject(result);
-        String access_token = object.getString("access_token");
         String openid = object.getString("openid");
+        String access_token = object.getString("access_token");
         Map<String, String> map1 = new HashMap<String, String>();
         map1.put("access_token", access_token);
         map1.put("openid", openid);
         map1.put("lang", "zh_CN");
         String info = sendGet("https://api.weixin.qq.com/sns/userinfo", map1);
+        System.out.println("info==="+info);
+        logger.fatal("info:"+info);
+
         ModelAndView mv = new ModelAndView("pages/weChatOauthTest");
         mv.addObject("result", info);
-
+        logger.fatal("mv:"+"返回modelandview");
         return mv;
     }
 

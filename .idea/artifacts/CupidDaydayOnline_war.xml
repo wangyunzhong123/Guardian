@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="CupidDaydayOnline:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/CupidDaydayOnline_war</output-path>
+    <root id="archive" name="CupidDaydayOnline_war.war">
+      <element id="artifact" artifact-name="CupidDaydayOnline:war exploded" />
+    </root>
+  </artifact>
+</component>

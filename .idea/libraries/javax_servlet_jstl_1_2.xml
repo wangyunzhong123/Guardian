@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="javax.servlet-jstl-1.2">
+    <CLASSES>
+      <root url="jar://D:/eclipse-jee-luna-SR2-win32-x86_64/workspace/healthSys/WebContent/WEB-INF/lib/javax.servlet-jstl-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
