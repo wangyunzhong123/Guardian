@@ -42,7 +42,7 @@ public class LoginController {
 
     @RequestMapping(value="index",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView testReturnUser1(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
-        System.out.println("收到index请求");
+//        System.out.println("收到index请求");
         logger.fatal("收到index请求");
         return new ModelAndView("pages/login");
     }
@@ -90,6 +90,16 @@ public class LoginController {
         String info = sendGet("https://api.weixin.qq.com/sns/userinfo", map1);
         System.out.println("info==="+info);
         logger.fatal("info:"+info);
+
+        JSONObject personInfo = new JSONObject(info);
+        String nickname = personInfo.getString("nickname");
+        String sex = personInfo.getString("sex");
+        String language = personInfo.getString("language");
+        String city = personInfo.getString("city");
+        String province = personInfo.getString("province");
+        String country = personInfo.getString("country");
+        String headimgurl = personInfo.getString("headimgurl");
+        String privilege = personInfo.getString("privilege");
 
         ModelAndView mv = new ModelAndView("pages/weChatOauthTest");
         mv.addObject("result", info);
