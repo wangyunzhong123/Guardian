@@ -253,7 +253,7 @@
         <%--tab3,,我问你答--%>
         <div id="tab3">
             <div>
-                <a href="javascript:;" class="tab3_add_question weui_btn weui_btn_mini weui_btn_primary">添加题目</a>
+                <a href="<%=basePath%>pages/add_question.jsp" class="tab3_add_question weui_btn weui_btn_mini weui_btn_primary">添加题目</a>
             </div>
             <br/>
             <c:forEach items="${questionlist}" var="question" varStatus="vs">
