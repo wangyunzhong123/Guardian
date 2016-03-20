@@ -53,4 +53,12 @@ public class QuestionItem {
     }
 
 
+    @Override
+    public String toString() {
+        return "QuestionItem{" +
+                "id=" + id +
+                ", context='" + context + '\'' +
+                ", question=" + question +
+                '}';
+    }
 }

@@ -65,4 +65,13 @@ public class Question {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", items=" + items +
+                '}';
+    }
 }

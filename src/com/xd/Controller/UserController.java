@@ -18,8 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by tianxi on 16-3-15.
@@ -139,6 +138,49 @@ public class UserController {
 
         request.setAttribute("myloverlist",myLoverList);
         return new ModelAndView("pages/my_lover");
+    }
+
+
+    @RequestMapping(value = "addquestion",method={RequestMethod.POST,RequestMethod.GET})
+    public ModelAndView addquestion(Question question, HashSet<QuestionItem> items, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+
+        System.out.println("addquestion");
+        System.out.println(question);
+        System.out.println(items);
+
+
+//        EntityManagerFactory factory = Persistence.createEntityManagerFactory("test");
+//        EntityManager em = factory.createEntityManager();
+//        em.getTransaction().begin();
+
+        //遍历set
+        Iterator<QuestionItem> it = items.iterator();
+        int i=0;
+        while(it.hasNext()){
+            QuestionItem item = it.next();
+            System.out.println(String.valueOf(i++)+item);
+
+            question.addQuestionItem(item);
+        }
+
+        loginService.addQuestion(question);//需要先存储
+        String context[] = request.getParameterValues("context");
+        for(int j=0;j<context.length;j++){
+            System.out.println(j+" ,"+context[j]);
+            QuestionItem item = new QuestionItem(context[j]);
+
+            item.setQuestion(question);
+//            question.addQuestionItem(item);
+            loginService.addQuestionItem(item);
+        }
+//        loginService.addQuestion(question);
+
+//        em.persist(question);
+//        em.getTransaction().commit();
+//        em.close();
+//        factory.close();
+
+        return new ModelAndView("pages/add_question");
     }
 
     public void setMyquestion(HttpServletRequest request){
