@@ -2,6 +2,8 @@ package com.xd.entity;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by tianxi on 16-3-15.
@@ -166,5 +168,74 @@ public class User {
     }
 
     public User() {
+    }
+
+    public User(String name, String password, String sex, String address) {
+        this.name = name;
+        this.password = password;
+        this.sex = sex;
+        this.address = address;
+    }
+
+    //
+    @OneToOne(cascade = {CascadeType.ALL})
+    private User_to user_to;
+
+    public User_to getUser_to() {
+        return user_to;
+    }
+
+    public void setUser_to(User_to user_to) {
+        this.user_to = user_to;
+    }
+
+    @OneToMany(cascade = {CascadeType.ALL},
+            mappedBy = "user",fetch = FetchType.EAGER)
+    private Set<MyQuestion> items = new HashSet<MyQuestion>();
+
+    public Set<MyQuestion> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<MyQuestion> items) {
+        this.items = items;
+    }
+    /*
+    该方法用于向里面添加item
+    * */
+    public void addQuestionItem(MyQuestion item){
+        item.setUser(this);
+        this.items.add(item);
+    }
+
+    /*
+    判断当前题库中的question是否在我的question列表里面
+    * */
+    public boolean isexist(Question question){
+        for(MyQuestion myQuestion:items){
+            if(myQuestion.getPrim_id() == question.getId())
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", sex='" + sex + '\'' +
+                ", birth='" + birth + '\'' +
+                ", height='" + height + '\'' +
+                ", education='" + education + '\'' +
+                ", career='" + career + '\'' +
+                ", income='" + income + '\'' +
+                ", address='" + address + '\'' +
+                ", locate='" + locate + '\'' +
+                ", dubai='" + dubai + '\'' +
+                ", user_to=" + user_to +
+                ", items=" + items +
+                '}';
     }
 }

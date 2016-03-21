@@ -155,4 +155,16 @@ public class User_to {
     public void setTell_to(String tell_to) {
         this.tell_to = tell_to;
     }
+
+    @OneToOne(mappedBy = "user_to",fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

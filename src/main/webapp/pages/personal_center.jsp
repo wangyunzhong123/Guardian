@@ -1,5 +1,7 @@
 <%@ page import="com.xd.entity.User" %>
 <%@ page import="com.xd.entity.User_to" %>
+<%@ page import="com.xd.entity.MyQuestion" %>
+<%@ page import="java.util.Set" %>
 <%--
   Created by IntelliJ IDEA.
   User: tianxi
@@ -94,7 +96,8 @@
                     <p>性别</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user.getSex()%>
+                    <%--<%=user.getSex()%>--%>
+                    ${user.sex}
                 </div>
             </div>
             <div class="weui_cell">
@@ -102,7 +105,8 @@
                     <p>出生日期</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user.getBirth()%>
+                    <%--<%=user.getBirth()%>--%>
+                    ${user.birth}
                 </div>
             </div>
             <div class="weui_cell">
@@ -110,7 +114,8 @@
                     <p>身高</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user.getHeight()%>
+                    <%--<%=user.getHeight()%>--%>
+                    ${user.height}
                 </div>
             </div>
             <div class="weui_cell">
@@ -118,7 +123,8 @@
                     <p>学历</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user.getEducation()%>
+                    <%--<%=user.getEducation()%>--%>
+                    ${user.education}
                 </div>
             </div>
             <div class="weui_cell">
@@ -126,7 +132,8 @@
                     <p>职业</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user.getCareer()%>
+                    <%--<%=user.getCareer()%>--%>
+                    ${user.career}
                 </div>
             </div>
             <div class="weui_cell">
@@ -134,7 +141,8 @@
                     <p>收入</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user.getIncome()%>
+                    <%--<%=user.getIncome()%>--%>
+                    ${user.income}
                 </div>
             </div>
             <div class="weui_cell">
@@ -142,7 +150,8 @@
                     <p>居住地</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user.getAddress()%>
+                    <%--<%=user.getAddress()%>--%>
+                    ${user.address}
                 </div>
             </div>
             <div class="weui_cell">
@@ -150,13 +159,14 @@
                     <p>籍贯</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user.getLocate()%>
+                    <%--<%=user.getLocate()%>--%>
+                    ${user.locate}
                 </div>
             </div>
 
             <span class="line_begin" >内心独白:</span>
             <div width="100%" >
-                <textarea type="text" class="form-control line_begin_1 " rows=6 placeholder="填写内心独白" ><%=user.getDubai()%></textarea>
+                <textarea type="text" class="form-control line_begin_1 " rows=6 placeholder="填写内心独白" >${user.dubai}</textarea>
             </div>
 
             <div class="line_begin_2">
@@ -181,10 +191,12 @@
                     <p>年龄</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user_to.getAge_start()%>
+                    <%--<%=user_to.getAge_start()%>--%>
+                    ${user_to.age_start}
                 </div>---
                 <div class="weui_cell_ft">
-                    <%=user_to.getAge_end()%>
+                    <%--<%=user_to.getAge_end()%>--%>
+                    ${user_to.age_end}
                 </div>
             </div>
             <div class="weui_cell">
@@ -192,10 +204,12 @@
                     <p>身高</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user_to.getHeight_start()%>
+                    <%--<%=user_to.getHeight_start()%>--%>
+                    ${user_to.height_start}
                 </div>---
                 <div class="weui_cell_ft">
-                    <%=user_to.getHeight_end()%>
+                    <%--<%=user_to.getHeight_end()%>--%>
+                    ${user_to.height_end}
                 </div>
             </div>
             <div class="weui_cell">
@@ -203,7 +217,8 @@
                     <p>学历</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user_to.getEducation()%>
+                    <%--<%=user_to.getEducation()%>--%>
+                    ${user_to.education}
                 </div>
             </div>
             <div class="weui_cell">
@@ -211,10 +226,12 @@
                     <p>收入</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user_to.getIncome_start()%>
+                    <%--<%=user_to.getIncome_start()%>--%>
+                    ${user_to.income_start}
                 </div>---
                 <div class="weui_cell_ft">
-                    <%=user_to.getIncome_end()%>
+                    <%--<%=user_to.getIncome_end()%>--%>
+                    ${user_to.income_end}
                 </div>
             </div>
             <div class="weui_cell">
@@ -222,7 +239,8 @@
                     <p>居住地</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user_to.getAddress()%>
+                    <%--<%=user_to.getAddress()%>--%>
+                    ${user_to.address}
                 </div>
             </div>
             <div class="weui_cell">
@@ -230,12 +248,13 @@
                     <p>籍贯</p>
                 </div>
                 <div class="weui_cell_ft">
-                    <%=user_to.getLocate()%>
+                    <%--<%=user_to.getLocate()%>--%>
+                    ${user_to.locate}
                 </div>
             </div>
             <span class="line_begin" >对他/她说:</span>
             <div width="100%" >
-                <textarea type="text" class="form-control line_begin_1 " readonly="readonly" rows=6 placeholder="想对他说..." ><%=user_to.getTell_to()%></textarea>
+                <textarea type="text" class="form-control line_begin_1 " readonly="readonly" rows=6 placeholder="想对他说..." >${user_to.tell_to}</textarea>
             </div>
 
             <div class="line_begin_2">
@@ -251,20 +270,23 @@
 
 
         <%--tab3,,我问你答--%>
+            <%
+                Set<MyQuestion> myQuestionSet = (Set<MyQuestion>)session.getAttribute("myquestionlist");
+            %>
         <div id="tab3">
             <div>
-                <a href="<%=basePath%>pages/add_question.jsp" class="tab3_add_question weui_btn weui_btn_mini weui_btn_primary">添加题目</a>
+                <a href="<%=basePath%>getquestionlist" class="tab3_add_question weui_btn weui_btn_mini weui_btn_primary">添加题目</a>
             </div>
             <br/>
-            <c:forEach items="${questionlist}" var="question" varStatus="vs">
+            <c:forEach items="<%=myQuestionSet%>" var="myquestion" varStatus="vs">
                     <div class="tab3_question_title">
-                        <header>${vs.index+1}. ${question.title}</header>
+                        <header>${vs.index+1}. ${myquestion.title}</header>
                     </div>
                     <div class="tab3_question_answer">
                         <img src="<%=basePath%>resources/img/smile.jpg" alt="图标" class="tab3_question_img" />
-                        <span >${question.myanswer}</span>
+                        <span >${myquestion.myanswer}</span>
                         <div class="tab3_question_reanswer">
-                            <a href="<%=basePath%>editmyquestion?question_prim_id=${question.prim_id}"
+                            <a href="<%=basePath%>editmyquestion?question_prim_id=${myquestion.prim_id}&question_id=${myquestion.id}"
                                class="weui_btn weui_btn_mini weui_btn_primary">重答</a>
                         </div>
                     </div>

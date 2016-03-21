@@ -1,6 +1,9 @@
 package com.xd.Controller;
 
+import com.xd.entity.User;
+import com.xd.entity.User_to;
 import com.xd.service.LoginService;
+import com.xd.shiro.ShiroLoginUtil;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,51 +63,87 @@ public class LoginController {
      */
     @RequestMapping(value="weChatOauth",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView weChatOauth(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
-        System.out.println("收到weChatOauth请求");
-        logger.fatal("收到weChatOauth请求");
-        String code = request.getParameter("code");
-        String state = request.getParameter("state");
-        logger.fatal("code:"+code);
-        logger.fatal("state:"+state);
-        System.out.println("code="+code);
-        if (code.equals("authdeny")){
-            logger.fatal("用户未授权");
-            return null;
+//        System.out.println("收到weChatOauth请求");
+//        logger.fatal("收到weChatOauth请求");
+//        String code = request.getParameter("code");
+//        String state = request.getParameter("state");
+//        logger.fatal("code:"+code);
+//        logger.fatal("state:"+state);
+//        System.out.println("code="+code);
+//        if (code.equals("authdeny")){
+//            logger.fatal("用户未授权");
+//            return null;
+//        }
+//        Map<String, String> map = new HashMap<String, String>();
+//        map.put("code", code);
+//        map.put("appid", "wx698530e78c6c010a");
+//        map.put("secret", "f1413d92a240e3482153754c953eeab5");
+//        map.put("grant_type", "authorization_code");
+//        String result = sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", map);
+//        System.out.println("access_token==="+result);
+//        logger.fatal("access_token:"+result);
+//
+//        JSONObject object = new JSONObject(result);
+//        String openid = object.getString("openid");
+//        String access_token = object.getString("access_token");
+//        Map<String, String> map1 = new HashMap<String, String>();
+//        map1.put("access_token", access_token);
+//        map1.put("openid", openid);
+//        map1.put("lang", "zh_CN");
+//        String info = sendGet("https://api.weixin.qq.com/sns/userinfo", map1);
+//        System.out.println("info==="+info);
+//        logger.fatal("info:"+info);
+//
+//        JSONObject personInfo = new JSONObject(info);
+//        String nickname = personInfo.getString("nickname");
+//        String sex = personInfo.getString("sex");
+//        String language = personInfo.getString("language");
+//        String city = personInfo.getString("city");
+//        String province = personInfo.getString("province");
+//        String country = personInfo.getString("country");
+//        String headimgurl = personInfo.getString("headimgurl");
+//        String privilege = personInfo.getString("privilege");
+
+        //测试使用
+        String openid = "12345";
+        String nickname = "wang";
+        String sex = "男";
+        String city = "北京";
+        //完成个人信息请求,开始操作数据库
+        User existUser=loginService.getUserByKey(openid);
+        if(existUser!=null)
+        {
+            if(ShiroLoginUtil.passwordsMatch(openid,existUser.getPassword()))
+            {
+                System.out.println("存在,匹配.");
+                ShiroLoginUtil.login(existUser);
+//                mv.setViewName("index");
+                return new ModelAndView("redirect:/getuser");
+            }
+            else
+            {
+                System.out.println("存在,不匹配.");
+//                mv.addObject("error", "密码错误！");
+//                mv.setViewName("login");
+            }
         }
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("code", code);
-        map.put("appid", "wx698530e78c6c010a");
-        map.put("secret", "f1413d92a240e3482153754c953eeab5");
-        map.put("grant_type", "authorization_code");
-        String result = sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", map);
-        System.out.println("access_token==="+result);
-        logger.fatal("access_token:"+result);
+        else//没有,则注册当前用户
+        {
+//            mv.addObject("error", "用户不存在！");
+//            mv.setViewName("login");
+            System.out.println("不存在,.");
+            User user = new User(nickname,openid,sex,city);
+            User_to user_to = new User_to();
+            loginService.addUser_to(user_to);
 
-        JSONObject object = new JSONObject(result);
-        String openid = object.getString("openid");
-        String access_token = object.getString("access_token");
-        Map<String, String> map1 = new HashMap<String, String>();
-        map1.put("access_token", access_token);
-        map1.put("openid", openid);
-        map1.put("lang", "zh_CN");
-        String info = sendGet("https://api.weixin.qq.com/sns/userinfo", map1);
-        System.out.println("info==="+info);
-        logger.fatal("info:"+info);
+            loginService.addUser(user);
 
-        JSONObject personInfo = new JSONObject(info);
-        String nickname = personInfo.getString("nickname");
-        String sex = personInfo.getString("sex");
-        String language = personInfo.getString("language");
-        String city = personInfo.getString("city");
-        String province = personInfo.getString("province");
-        String country = personInfo.getString("country");
-        String headimgurl = personInfo.getString("headimgurl");
-        String privilege = personInfo.getString("privilege");
+            ShiroLoginUtil.login(user);
+            return new ModelAndView("redirect:/getuser");
+        }
 
-        ModelAndView mv = new ModelAndView("pages/weChatOauthTest");
-        mv.addObject("result", info);
-        logger.fatal("mv:"+"返回modelandview");
-        return mv;
+        System.out.println("!!!!!!!!!!!!");
+        return null;
     }
 
     /**

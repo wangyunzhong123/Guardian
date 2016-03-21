@@ -22,8 +22,8 @@ public class Question {
     @Column(name="titile")
     private String title;
 
-    @OneToMany(cascade = {CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH},
-    mappedBy = "question")
+    @OneToMany(cascade = {CascadeType.ALL},
+    mappedBy = "question",fetch = FetchType.EAGER)
     private Set<QuestionItem> items = new HashSet<QuestionItem>();
 
     public void setItems(Set<QuestionItem> items){

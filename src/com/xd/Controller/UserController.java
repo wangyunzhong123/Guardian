@@ -2,10 +2,12 @@ package com.xd.Controller;
 
 import com.xd.entity.*;
 import com.xd.service.LoginService;
+import com.xd.shiro.ShiroLoginUtil;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -38,15 +40,13 @@ public class UserController {
         response.setCharacterEncoding("utf-8");
         System.out.println(user.toString());
 
+        loginService.addUser(user);
+//        User_to user_to = user.getUser_to();
+//        HttpSession session = request.getSession();
+//        session.setAttribute("user",user);
+//        session.setAttribute("user_to",user_to);
 
-        User_to user_to = new User_to("1","2","3","4","5","6","7","8","9","10");
-        HttpSession session = request.getSession();
-        session.setAttribute("user",user);
-        session.setAttribute("user_to",user_to);
-
-        setMyquestion(request);//测试使用,静态数据
-
-        return new ModelAndView("pages/personal_center");
+        return new ModelAndView("redirect:/getuser");
 
 //        xssfilter(aa);//过滤非法字符
         /*添加成功后返回一个新的页面，jsp页面显示最新的信息*/
@@ -61,57 +61,53 @@ public class UserController {
         System.out.println(user_to.toString());
 
 
-        User user = new User("1","2","3","4","5","6","7","8","9","10","11");
+        User user = ShiroLoginUtil.getCurrentUser();
 
-        setMyquestion(request);//测试使用,静态数据
+        loginService.addUser(user);
 
+        loginService.addUser_to(user_to);
 
-        HttpSession session = request.getSession();
-        session.setAttribute("user",user);
-        session.setAttribute("user_to",user_to);
-        return new ModelAndView("pages/personal_center");
+//        HttpSession session = request.getSession();
+//        session.setAttribute("user",user);
+//        session.setAttribute("user_to",user_to);
+        return new ModelAndView("redirect:/getuser");
     }
 
 
     @RequestMapping(value = "getuser",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView getUser(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
-        System.out.println("进入到getuser");
+//        System.out.println("进入到getuser");
 
-        User user = new User("1","2","3","4","5","6","7","8","9","10","11");
+        User user= ShiroLoginUtil.getCurrentUser();
+        System.out.println(user);
+        User_to user_to = user.getUser_to();
+        Set<MyQuestion> myQuestionsSet = user.getItems();
+        System.out.println("请求到的myQuestionsSet个数是  "+myQuestionsSet.size());
 
-        User_to user_to = new User_to("1","2","3","4","5","6","7","8","9","10");
-
-        Cookie cookie[] = request.getCookies();
+//        Cookie cookie[] = request.getCookies();
 
         HttpSession session = request.getSession();
 
-        setMyquestion(request);//测试使用,静态数据
+//        setMyquestion(request);//测试使用,静态数据
 
         session.setAttribute("user",user);
         session.setAttribute("user_to",user_to);
+        session.setAttribute("myquestionlist",myQuestionsSet);
 
         return new ModelAndView("pages/personal_center");
     }
 
     @RequestMapping(value="editmyquestion",method={RequestMethod.POST,RequestMethod.GET})
-    public ModelAndView editmyquestion(String question_prim_id, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+    public ModelAndView editmyquestion(int question_prim_id, int question_id,HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
 
 //        EntityManagerFactory factory = Persistence.createEntityManagerFactory("test");
 //        EntityManager em = factory.createEntityManager();
 //        em.getTransaction().begin();
 
-        QuestionItem item1 = new QuestionItem("非常讨厌");
-        QuestionItem item2 = new QuestionItem("讨厌");
-        QuestionItem item3 = new QuestionItem("喜欢");
-        QuestionItem item4 = new QuestionItem("非常喜欢");
 
-        Question question = new Question("你喜欢宋仲基吗?");
-        question.addQuestionItem(item1);
-        question.addQuestionItem(item2);
-        question.addQuestionItem(item3);
-        question.addQuestionItem(item4);
+        Question question = loginService.getQuestionByid(question_prim_id);
 
 //        em.persist(question);
 //        em.getTransaction().commit();
@@ -119,9 +115,23 @@ public class UserController {
 //        factory.close();
 
         request.setAttribute("question",question);
+        request.setAttribute("question_id",question_id);
 
         return new ModelAndView("pages/edit_myquestion");
     }
+
+    @RequestMapping(value="editmyquestion_save",method={RequestMethod.POST,RequestMethod.GET})
+    public ModelAndView editmyquestion_save(int question_id,MyQuestion myQuestion,HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+
+        User user = ShiroLoginUtil.getCurrentUser();
+//        loginService.addUser(user);
+        myQuestion.setUser(user);
+//        loginService.addMyQuestion(myQuestion);
+        loginService.updateMyQuestion(myQuestion);
+
+        return new ModelAndView("redirect:/getuser");
+    }
+
 
 
     @RequestMapping(value = "getmylover",method={RequestMethod.POST,RequestMethod.GET})
@@ -141,6 +151,7 @@ public class UserController {
     }
 
 
+    //管理员向题库中添加题目
     @RequestMapping(value = "addquestion",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView addquestion(Question question, HashSet<QuestionItem> items, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
@@ -181,6 +192,31 @@ public class UserController {
 //        factory.close();
 
         return new ModelAndView("pages/add_question");
+    }
+
+    //用户添加问题的时候,请求页面
+    @RequestMapping(value = "getquestionlist",method={RequestMethod.POST,RequestMethod.GET})
+    public ModelAndView getquestionlist(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+
+        List<Question> questionList = loginService.getQuestionlist();
+        User user = ShiroLoginUtil.getCurrentUser();
+        request.setAttribute("questionlist",questionList);
+        request.setAttribute("user",user);
+        return new ModelAndView("pages/add_myquestion");
+    }
+
+    //用户添加题目
+    @RequestMapping(value = "addmyquestion",method={RequestMethod.POST,RequestMethod.GET})
+    public void addmyquestion(@RequestParam("questionid") int questionid, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+
+        Question question = loginService.getQuestionByid(questionid);
+        MyQuestion myQuestion = new MyQuestion(question.getId(),question.getTitle());
+        User user = ShiroLoginUtil.getCurrentUser();
+        myQuestion.setUser(user);
+//        loginService.addUser(user);
+        loginService.addMyQuestion(myQuestion);
+
+        response.getOutputStream().write("add success".getBytes("utf-8"));
     }
 
     public void setMyquestion(HttpServletRequest request){

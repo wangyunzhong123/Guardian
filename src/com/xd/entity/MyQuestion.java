@@ -33,7 +33,12 @@ public class MyQuestion {
     public MyQuestion() {
     }
 
-    public MyQuestion(Integer prim_id,String title, String myanswer, String acceptanswer, String importance) {
+    public MyQuestion(Integer prim_id, String title) {
+        this.prim_id = prim_id;
+        this.title = title;
+    }
+
+    public MyQuestion(Integer prim_id, String title, String myanswer, String acceptanswer, String importance) {
         this.prim_id = prim_id;
         this.title = title;
         this.myanswer = myanswer;
@@ -90,4 +95,15 @@ public class MyQuestion {
     }
 
 
+    @ManyToOne(cascade ={CascadeType.ALL},optional = true,fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

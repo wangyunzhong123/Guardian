@@ -68,8 +68,8 @@
             <%--<div class="weui_cell_bd weui_cell_primary">--%>
                 <%--<input class="weui_input" type="date" name="birth" value=<%=user.getBirth()%>>--%>
             <%--</div>--%>
-            <input type="number" name="age_start" min="18" max="120" step="1" value=<%=user_to.getAge_start()%> />---
-            <input type="number" name="age_end" min="18" max="120" step="1" value=<%=user_to.getAge_end()%> />
+            <input type="number" name="age_start" min="18" max="120" step="1" value=${user_to.age_start} />---
+            <input type="number" name="age_end" min="18" max="120" step="1" value=${user_to.age_end} />
 
         </div>
 
@@ -78,8 +78,8 @@
             <%--<div class="weui_cell_bd weui_cell_primary">--%>
                 <%--<input class="weui_input" type="number" name="height" placeholder=<%=user.getHeight()%>>--%>
             <%--</div>--%>
-            <input type="number" name="height_start" min="160" max="220" step="2" value=<%=user_to.getHeight_start()%> />---
-            <input type="number" name="height_end" min="160" max="220" step="2" value=<%=user_to.getHeight_end()%> />
+            <input type="number" name="height_start" min="160" max="220" step="2" value=${user_to.height_start} />---
+            <input type="number" name="height_end" min="160" max="220" step="2" value=${user_to.height_end} />
         </div>
 
         <div class="weui_cell weui_cell_select">
@@ -101,22 +101,22 @@
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">收入</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input type="number" name="income_start" min="1000" max="100000" step="1000" value=<%=user_to.getIncome_start()%> />---
-                <input type="number" name="income_end" min="1000" max="100000" step="1000" value=<%=user_to.getIncome_end()%> />
+                <input type="number" name="income_start" min="1000" max="100000" step="1000" value=${user_to.income_start} />---
+                <input type="number" name="income_end" min="1000" max="100000" step="1000" value=${user_to.income_end} />
             </div>
         </div>
 
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">居住地</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="text" name="address" placeholder=<%=user_to.getAddress()%> value=<%=user_to.getAddress()%> />
+                <input class="weui_input" type="text" name="address" placeholder=${user_to.address} value=${user_to.address} />
             </div>
         </div>
 
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">籍贯</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="text" name="locate" placeholder=<%=user_to.getLocate()%> value=<%=user_to.getLocate()%> />
+                <input class="weui_input" type="text" name="locate" placeholder=${user_to.locate} value=${user_to.locate} />
             </div>
         </div>
 
@@ -130,7 +130,7 @@
     <div class="weui_cells weui_cells_form">
         <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">
-                <textarea class="weui_textarea" name="tell_to" placeholder="请输入想说的话..." rows="3"><%=user_to.getTell_to()%></textarea>
+                <textarea class="weui_textarea" name="tell_to" placeholder="请输入想说的话..." rows="3">${user_to.tell_to}</textarea>
                 <div class="weui_textarea_counter"><span>0</span>/200</div>
             </div>
         </div>

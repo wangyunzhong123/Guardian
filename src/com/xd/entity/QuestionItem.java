@@ -41,7 +41,7 @@ public class QuestionItem {
         this.context = context;
     }
 
-    @ManyToOne(cascade ={CascadeType.MERGE,CascadeType.REFRESH},optional = true)
+    @ManyToOne(cascade ={CascadeType.ALL},optional = true,fetch = FetchType.EAGER)
     @JoinColumn(name="question_id")
     private Question question;
     public void setQuestion(Question question){
