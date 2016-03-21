@@ -17,8 +17,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-
-
     <filter>
         <filter-name>EncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -31,7 +29,6 @@
         <filter-name>EncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
 
     <servlet>
         <servlet-name>Dispatcher</servlet-name>
