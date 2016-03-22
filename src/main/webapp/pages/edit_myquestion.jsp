@@ -36,12 +36,12 @@
 
         <%
             Question question = (Question)request.getAttribute("question");
-            int question_id = (Integer) request.getAttribute("question_id");
+            int myquestion_id = (Integer) request.getAttribute("myquestion_id");
         %>
 
         <div class="to_all">
-            <form action="<%=basePath%>editmyquestion_save?question_id=<%=question_id%>" method="post">
-                <input name="id" value="<%=question_id%>" class="id_none"/>
+            <form action="<%=basePath%>editmyquestion_save?question_id=<%=myquestion_id%>" method="post">
+                <input name="id" value="<%=myquestion_id%>" class="id_none"/>
                 <h1><input name="title" value = "<%=question.getTitle()%>" readonly="readonly" /></h1>
                 <br/>
                 <h3>我的答案是:</h3>
@@ -69,6 +69,8 @@
                     <input type="submit" class="weui_btn weui_btn_primary" />
                 </div>
                 <a href="<%=basePath%>getuser" class="weui_btn weui_btn_mini weui_btn_default">跳过</a>
+                <%--<input type="button" onclick="deletemyquestion(<%=myquestion_id%>)" class="weui_btn weui_btn_mini weui_btn_default">删除该问题</input>--%>
+                <a href="<%=basePath%>deletemyquestion?myquestionid=<%=myquestion_id%>" class="weui_btn weui_btn_mini weui_btn_default">删除该问题</a>
 
             </form>
         </div>
@@ -76,4 +78,24 @@
 
 
 </body>
+<script src="<%=basePath%>resources/js/jquery-1.8.2.js"> </script>
+
+<script type="text/javascript">
+    function deletemyquestion(myquestionid){
+        $.ajax({
+            url:'deletemyquestion',
+            type:'post', //数据发送方式
+            dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json)
+            data:"myquestionid="+myquestionid, //要传递的数据
+            error: function(){ //失败
+//                    alert('失败');
+            },
+            success: function(msg){ //成功
+                alert("成功");
+
+            }
+        });
+    }
+</script>
+
 </html>

@@ -106,4 +106,6 @@ public class MyQuestion {
     public void setUser(User user) {
         this.user = user;
     }
+
+
 }

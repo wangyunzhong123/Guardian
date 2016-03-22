@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -62,19 +58,12 @@ public class UserController {
         response.setCharacterEncoding("utf-8");
         System.out.println("得到的user_to 的ID是,,,"+user_to.toString()+"  ");
 
-
         User user1 = ShiroLoginUtil.getCurrentUser();
 
         User user = loginService.getUserByKey(user1.getPassword());
-//        loginService.updateUser(user);
-//        user_to.setId(user.getUser_to().getId());
         user_to.setUser(user);
-//        loginService.updateUser(user);
         loginService.updateUser_to(user_to);
 
-//        HttpSession session = request.getSession();
-//        session.setAttribute("user",user);
-//        session.setAttribute("user_to",user_to);
         return new ModelAndView("redirect:/getuser");
     }
 
@@ -82,23 +71,14 @@ public class UserController {
     @RequestMapping(value = "getuser",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView getUser(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
-//        System.out.println("进入到getuser");
-
         User user1= ShiroLoginUtil.getCurrentUser();
-//        User user = loginService.getUserByKey(user1.getPassword());
         User user = loginService.getUserById(user1.getId());
 
-//        User_to user_to = loginService.getUser_ToByUserId(user.getId());
         User_to user_to = user.getUser_to();
-//        System.out.println("在getUser中的user_to"+user_to.toString());
-        Set<MyQuestion> myQuestionsSet = user.getItems();
+        List<MyQuestion> myQuestionsSet = user.getItems();
         System.out.println("请求到的myQuestionsSet个数是  "+myQuestionsSet.size());
 
-//        Cookie cookie[] = request.getCookies();
-
         HttpSession session = request.getSession();
-
-//        setMyquestion(request);//测试使用,静态数据
 
         session.setAttribute("user",user);
         session.setAttribute("user_to",user_to);
@@ -107,6 +87,7 @@ public class UserController {
         return new ModelAndView("pages/personal_center");
     }
 
+    //获取重答的我的题目页面
     @RequestMapping(value="editmyquestion",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView editmyquestion(int question_prim_id, int question_id,HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
@@ -124,18 +105,23 @@ public class UserController {
 //        factory.close();
 
         request.setAttribute("question",question);
-        request.setAttribute("question_id",question_id);
+        request.setAttribute("myquestion_id",question_id);
 
         return new ModelAndView("pages/edit_myquestion");
     }
 
+    //删除我的题目
+    @RequestMapping(value="deletemyquestion",method={RequestMethod.POST,RequestMethod.GET})
+    public ModelAndView deletemyquestion (int myquestionid,HttpServletRequest request, HttpServletResponse response){
+        loginService.deleteMyQuestion(myquestionid);
+        return new ModelAndView("redirect:/getuser");
+    }
+    //编辑我的题目保存
     @RequestMapping(value="editmyquestion_save",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView editmyquestion_save(int question_id,MyQuestion myQuestion,HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
         User user = ShiroLoginUtil.getCurrentUser();
-//        loginService.addUser(user);
         myQuestion.setUser(user);
-//        loginService.addMyQuestion(myQuestion);
         loginService.updateMyQuestion(myQuestion);
 
         return new ModelAndView("redirect:/getuser");
@@ -208,9 +194,27 @@ public class UserController {
     public ModelAndView getquestionlist(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
         List<Question> questionList = loginService.getQuestionlist();
-        User user = ShiroLoginUtil.getCurrentUser();
+        User user1 = ShiroLoginUtil.getCurrentUser();
+        User user = loginService.getUserByKey(user1.getPassword());
+        List<MyQuestion> myQuestionList = user.getItems();
+        //遍历题库中的题目是或否已在我的题目中
+        List<Integer> result = new ArrayList<Integer>();
+        int result1[] = new int[questionList.size()];
+        for(int i=0;i<questionList.size();i++){
+            if(questionList.get(i).isexistMyQuestionList(myQuestionList)){
+                result.add(1);
+                result1[i]=1;
+            }
+            else{
+                result.add(0);
+                result1[i]=0;
+            }
+        }
+        for(int j=0;j<result.size();j++)
+            System.out.println(result.get(j));
         request.setAttribute("questionlist",questionList);
-        request.setAttribute("user",user);
+        request.setAttribute("result",result);
+        request.setAttribute("result1",result1);
         return new ModelAndView("pages/add_myquestion");
     }
 
@@ -218,14 +222,23 @@ public class UserController {
     @RequestMapping(value = "addmyquestion",method={RequestMethod.POST,RequestMethod.GET})
     public void addmyquestion(@RequestParam("questionid") int questionid, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
+        //判断是否已经在我的题目中
+        User user1 = ShiroLoginUtil.getCurrentUser();
+        User user = loginService.getUserByKey(user1.getPassword());
+        List<MyQuestion> myQuestionList = user.getItems();
+        for(int i=0;i<myQuestionList.size();i++){
+            if(myQuestionList.get(i).getPrim_id().equals(questionid)){
+                response.getOutputStream().write("已存在".getBytes("utf-8"));
+                return;
+            }
+        }
         Question question = loginService.getQuestionByid(questionid);
         MyQuestion myQuestion = new MyQuestion(question.getId(),question.getTitle());
-        User user = ShiroLoginUtil.getCurrentUser();
         myQuestion.setUser(user);
 //        loginService.addUser(user);
         loginService.addMyQuestion(myQuestion);
 
-        response.getOutputStream().write("add success".getBytes("utf-8"));
+        response.getOutputStream().write("添加成功".getBytes("utf-8"));
     }
 
     public void setMyquestion(HttpServletRequest request){

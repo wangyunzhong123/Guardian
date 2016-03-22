@@ -2,6 +2,7 @@
 <%@ page import="com.xd.entity.User_to" %>
 <%@ page import="com.xd.entity.MyQuestion" %>
 <%@ page import="java.util.Set" %>
+<%@ page import="java.util.List" %>
 <%--
   Created by IntelliJ IDEA.
   User: tianxi
@@ -164,7 +165,7 @@
 
             <span class="line_begin" >内心独白:</span>
             <div width="100%" >
-                <textarea type="text" class="form-control line_begin_1 " rows=6 placeholder="填写内心独白" >${user.dubai}</textarea>
+                <textarea type="text" class="form-control line_begin_1 " readonly="readonly"  rows=6 placeholder="填写内心独白" >${user.dubai}</textarea>
             </div>
 
             <div class="line_begin_2">
@@ -269,7 +270,7 @@
 
         <%--tab3,,我问你答--%>
             <%
-                Set<MyQuestion> myQuestionSet = (Set<MyQuestion>)session.getAttribute("myquestionlist");
+                List<MyQuestion> myQuestionSet = (List<MyQuestion>)session.getAttribute("myquestionlist");
             %>
         <div id="tab3">
             <div>

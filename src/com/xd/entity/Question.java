@@ -1,7 +1,9 @@
 package com.xd.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,16 +26,14 @@ public class Question {
 
     @OneToMany(cascade = {CascadeType.ALL},
     mappedBy = "question",fetch = FetchType.EAGER)
-    private Set<QuestionItem> items = new HashSet<QuestionItem>();
+    private List<QuestionItem> items = new ArrayList<QuestionItem>();
 
-    public void setItems(Set<QuestionItem> items){
+    public void setItems(List<QuestionItem> items){
         this.items = items;
     }
-    public Set<QuestionItem> getItems(){
+    public List<QuestionItem> getItems(){
         return items;
     }
-
-
 
     /*
     该方法用于向里面添加item
@@ -73,5 +73,15 @@ public class Question {
                 ", title='" + title + '\'' +
                 ", items=" + items +
                 '}';
+    }
+    //检测是否包含List MyQUestion
+    public boolean isexistMyQuestionList(List<MyQuestion> myQuestionList){
+        for(int i=0;i<myQuestionList.size();i++){
+            System.out.println(myQuestionList.get(i).getPrim_id()+",,,,"+this.getId());
+            if(myQuestionList.get(i).getPrim_id().equals(this.getId()))
+                return true;
+
+        }
+        return false;//不包含返回false
     }
 }

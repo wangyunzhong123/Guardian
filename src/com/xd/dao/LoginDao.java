@@ -148,6 +148,13 @@ public class LoginDao {
         session.clear();
         return myQuestion;
     }
+    //删除我的问题
+    public MyQuestion deleteMyQuestion(int id){
+        Session session = sessionFactory.getCurrentSession();
+        MyQuestion myQuestion = (MyQuestion) session.get(MyQuestion.class,id);
+        session.delete(myQuestion);
+        return myQuestion;
+    }
 
     //跟新我的题目
     public MyQuestion updateMyQuestion(MyQuestion myQuestion){

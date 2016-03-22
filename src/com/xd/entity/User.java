@@ -2,7 +2,9 @@ package com.xd.entity;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -205,13 +207,13 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.ALL},
             mappedBy = "user",fetch = FetchType.EAGER)
-    private Set<MyQuestion> items = new HashSet<MyQuestion>();
+    private List<MyQuestion> items = new ArrayList<MyQuestion>();
 
-    public Set<MyQuestion> getItems() {
+    public List<MyQuestion> getItems() {
         return items;
     }
 
-    public void setItems(Set<MyQuestion> items) {
+    public void setItems(List<MyQuestion> items) {
         this.items = items;
     }
     /*

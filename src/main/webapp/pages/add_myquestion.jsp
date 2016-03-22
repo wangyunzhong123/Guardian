@@ -38,7 +38,6 @@
 
 <%
     List<Question> questionlist = (List<Question>)request.getAttribute("questionlist");
-    User user = (User)request.getAttribute("user");
 %>
 
 <div class="to_all">
@@ -48,16 +47,23 @@
         <%!
             int i=0;
         %>
-        <c:forEach items="<%=questionlist%>" var="question" varStatus="vs">
+        <c:forEach items="<%=questionlist%>" var="question" varStatus="vs" >
 
-            <h3>${vs.index+1}.${question.title}></h3>
-            <c:forEach items="${question.items}" var="item" varStatus="vs">
+            <%--<c:set var="flag" value="${result1[vs]}" />--%>
+            <h3>${vs.index+1}. ${question.title}></h3>
+            <c:forEach items="${question.items}" var="item" varStatus="v">
                 <label><input class="input_margin_left" name="Fruit" type="radio" value=${item.context} />${item.context} </label>
                 <br/>
             </c:forEach>
             <div class="line_begin_2">
                 <%--本来是想用user判断当前题目是否已经在用户的mmyquestion里,但还未能实现--%>
                 <input type="button" onclick="add_myquestion(${question.id})" class="weui_btn weui_btn_primary" value="确认添加" />
+                <%--<c:if test="${flag == 1}">--%>
+                    <%--<input type="button" class="weui_btn weui_btn_primary" value="已存在" />--%>
+                 <%--</c:if>--%>
+                <%--<c:if test="${flag == 0}">--%>
+                    <%--<input type="button" onclick="add_myquestion(${question.id})" class="weui_btn weui_btn_primary" value="确认添加" />--%>
+                <%--</c:if>--%>
             </div>
             <br/><br/>
 
@@ -101,12 +107,13 @@
             $.ajax({
                 url:'addmyquestion',
                 type:'post', //数据发送方式
-                dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json)
+//                dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json)
                 data:"questionid="+questionid, //要传递的数据
                 error: function(){ //失败
 //                    alert('失败');
                 },
                 success: function(msg){ //成功
+                    alert(msg);
                 }
             });
         }
