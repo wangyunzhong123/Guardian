@@ -79,7 +79,7 @@
         <div width="100%" >
             <ul class="nav nav-pills cate_tab" width="100%">
                 <li  id="li_0"><a href="#" onclick="tab_change(0)">基本信息</a></li>
-                <li class="active" id="li_1"><a href="#"  onclick="tab_change(1)">择偶条件</a></li>
+                <li id="li_1"><a href="#"  onclick="tab_change(1)">择偶条件</a></li><%--class="active"--%>
                 <li id="li_2" ><a href="#"  onclick="tab_change(2)">我问你答</a></li>
             </ul>
         </div>
@@ -87,8 +87,6 @@
          <%--tab1--%>
          <%
              User user = (User)session.getAttribute("user");
-
-
          %>
         <div id=tab1 class="weui_cells">
             <div class="weui_cell">

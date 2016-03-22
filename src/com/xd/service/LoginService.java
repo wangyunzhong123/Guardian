@@ -28,16 +28,34 @@ public class LoginService {
        return userDao.getUserByKey(key);
     }
 
+    //根据ID查询用户..其实密码字段存储的是openid
+    public User getUserById(int id){
+        return userDao.getUserById(id);
+    }
+
+    //根据userId查询user_to
+    public User_to getUser_ToByUserId(int id){
+        return userDao.getUser_ToByUserId(id);
+    }
+
     //保存注册用户
     public User addUser(User user){
         return userDao.addUser(user);
     }
 
+    //更新用户
+    public User updateUser(User user){
+        return userDao.updateUser(user);
+    }
     //保存注册用户
     public User_to addUser_to(User_to user){
         return userDao.addUser_to(user);
     }
 
+    //更新
+    public User_to updateUser_to(User_to user){
+        return userDao.updateUser_to(user);
+    }
     //请求问题列表
     public List<Question> getQuestionlist(){
         return userDao.getQuestionlist();

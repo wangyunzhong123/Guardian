@@ -68,6 +68,22 @@ public class User_to {
         this.tell_to = tell_to;
     }
 
+    public void setUser_to(String age_start, String age_end,
+                   String height_start, String height_end,
+                   String education, String income_start,
+                   String income_end, String address, String locate, String tell_to) {
+        this.age_start = age_start;
+        this.age_end = age_end;
+        this.height_start = height_start;
+        this.height_end = height_end;
+        this.education = education;
+        this.income_start = income_start;
+        this.income_end = income_end;
+        this.address = address;
+        this.locate = locate;
+        this.tell_to = tell_to;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -156,10 +172,11 @@ public class User_to {
         this.tell_to = tell_to;
     }
 
-    @OneToOne(mappedBy = "user_to",fetch = FetchType.EAGER)
+
+
+    @OneToOne(cascade = {CascadeType.ALL},optional = true,fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     private User user;
-
     public User getUser() {
         return user;
     }
@@ -167,4 +184,22 @@ public class User_to {
     public void setUser(User user) {
         this.user = user;
     }
+
+//    @Override
+//    public String toString() {
+//        return "User_to{" +
+//                "id=" + id +
+//                ", age_start='" + age_start + '\'' +
+//                ", age_end='" + age_end + '\'' +
+//                ", height_start='" + height_start + '\'' +
+//                ", height_end='" + height_end + '\'' +
+//                ", education='" + education + '\'' +
+//                ", income_start='" + income_start + '\'' +
+//                ", income_end='" + income_end + '\'' +
+//                ", address='" + address + '\'' +
+//                ", locate='" + locate + '\'' +
+//                ", tell_to='" + tell_to + '\'' +
+//                ", user=" + user +
+//                '}';
+//    }
 }

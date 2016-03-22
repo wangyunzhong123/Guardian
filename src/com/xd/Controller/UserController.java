@@ -40,7 +40,9 @@ public class UserController {
         response.setCharacterEncoding("utf-8");
         System.out.println(user.toString());
 
-        loginService.addUser(user);
+        User u = ShiroLoginUtil.getCurrentUser();
+        user.setId(u.getId());
+        loginService.updateUser(user);
 //        User_to user_to = user.getUser_to();
 //        HttpSession session = request.getSession();
 //        session.setAttribute("user",user);
@@ -55,17 +57,20 @@ public class UserController {
 
     /*新增用户to,,心仪对象实体*/
     @RequestMapping(value="adduser_to",method={RequestMethod.POST,RequestMethod.GET})
-    public ModelAndView AddUser_update_to(User_to user_to, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public ModelAndView AddUser_update_to(User_to user_to,HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         request.setCharacterEncoding("utf-8");//@RequestBody ProductComp aa,
         response.setCharacterEncoding("utf-8");
-        System.out.println(user_to.toString());
+        System.out.println("得到的user_to 的ID是,,,"+user_to.toString()+"  ");
 
 
-        User user = ShiroLoginUtil.getCurrentUser();
+        User user1 = ShiroLoginUtil.getCurrentUser();
 
-        loginService.addUser(user);
-
-        loginService.addUser_to(user_to);
+        User user = loginService.getUserByKey(user1.getPassword());
+//        loginService.updateUser(user);
+//        user_to.setId(user.getUser_to().getId());
+        user_to.setUser(user);
+//        loginService.updateUser(user);
+        loginService.updateUser_to(user_to);
 
 //        HttpSession session = request.getSession();
 //        session.setAttribute("user",user);
@@ -79,9 +84,13 @@ public class UserController {
 
 //        System.out.println("进入到getuser");
 
-        User user= ShiroLoginUtil.getCurrentUser();
-        System.out.println(user);
+        User user1= ShiroLoginUtil.getCurrentUser();
+//        User user = loginService.getUserByKey(user1.getPassword());
+        User user = loginService.getUserById(user1.getId());
+
+//        User_to user_to = loginService.getUser_ToByUserId(user.getId());
         User_to user_to = user.getUser_to();
+//        System.out.println("在getUser中的user_to"+user_to.toString());
         Set<MyQuestion> myQuestionsSet = user.getItems();
         System.out.println("请求到的myQuestionsSet个数是  "+myQuestionsSet.size());
 

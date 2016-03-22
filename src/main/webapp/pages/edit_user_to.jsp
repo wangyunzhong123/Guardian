@@ -48,6 +48,7 @@
 
         .line_begin_1{margin-left: 15px;margin-right: 15px;}
         .line_begin_2{width: 180px;-moz-box-pack: center;-webkit-box-pack: center;margin-left: auto;margin-right: auto;margin-top: 15px;}
+        .id_none{display: none;}
     </style>
 
 
@@ -68,6 +69,7 @@
             <%--<div class="weui_cell_bd weui_cell_primary">--%>
                 <%--<input class="weui_input" type="date" name="birth" value=<%=user.getBirth()%>>--%>
             <%--</div>--%>
+            <input type="number" name="id" class="id_none" value=${user_to.id}  />
             <input type="number" name="age_start" min="18" max="120" step="1" value=${user_to.age_start} />---
             <input type="number" name="age_end" min="18" max="120" step="1" value=${user_to.age_end} />
 

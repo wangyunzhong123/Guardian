@@ -132,11 +132,14 @@ public class LoginController {
 //            mv.addObject("error", "用户不存在！");
 //            mv.setViewName("login");
             System.out.println("不存在,.");
-            User user = new User(nickname,openid,sex,city);
+            User user1 = new User(nickname,openid,sex,city);
             User_to user_to = new User_to();
+
+            loginService.addUser(user1);
+            User user = loginService.getUserByKey(user1.getPassword());
+            user_to.setUser(user);
             loginService.addUser_to(user_to);
 
-            loginService.addUser(user);
 
             ShiroLoginUtil.login(user);
             return new ModelAndView("redirect:/getuser");

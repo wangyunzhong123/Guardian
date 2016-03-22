@@ -166,6 +166,20 @@ public class User {
         this.locate = locate;
         this.dubai = dubai;
     }
+    public void setUser(String name, String sex, String birth,
+                String height, String education, String career, String income,
+                String address, String locate, String dubai) {
+        this.name = name;
+        this.sex = sex;
+        this.birth = birth;
+        this.height = height;
+        this.education = education;
+        this.career = career;
+        this.income = income;
+        this.address = address;
+        this.locate = locate;
+        this.dubai = dubai;
+    }
 
     public User() {
     }
@@ -177,10 +191,10 @@ public class User {
         this.address = address;
     }
 
-    //
-    @OneToOne(cascade = {CascadeType.ALL})
-    private User_to user_to;
 
+    //
+    @OneToOne(cascade = {CascadeType.ALL},mappedBy = "user",fetch = FetchType.EAGER)
+    private User_to user_to;
     public User_to getUser_to() {
         return user_to;
     }
