@@ -65,6 +65,7 @@
 
         .line_begin_1{margin-left: 15px;margin-right: 15px;}
         .line_begin_2{width: 180px;-moz-box-pack: center;-webkit-box-pack: center;margin-left: auto;margin-right: auto;margin-top: 15px;}
+        .line_begin_3{width: 100%;-moz-box-pack: center;-webkit-box-pack: center;margin-left: auto;margin-right: auto;margin-top: 15px;}
 
         .cate_tab label{
             font-weight: bold;
@@ -158,6 +159,16 @@
         }
         .mycontent a{
             text-align: right;
+        }
+        .to_adb{
+            position: fixed;
+            bottom: 15px;
+            align-content: center;
+            text-align: center;
+        }
+        .contentt{
+            margin-bottom: 45px;
+            padding-bottom: 45px;
         }
     </style>
 
@@ -423,17 +434,10 @@
              </c:forEach>
         </div>
 
-
-        <%--自我推广按钮--%>
-        <div class="line_begin_2">
-            <%--<button type="button" width="50%" class="btn btn-primary">--%>
-                <%--自我推广--%>
-            <%--</button>--%>
-             <a href="javascript:;" class="weui_btn weui_btn_disabled weui_btn_primary">自我推广</a>
-        </div>
-
-
-
+    </div>
+    <%--自我推广按钮--%>
+    <div class="line_begin_3">
+        <a href="javascript:;" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">自我推广</a>
     </div>
 </body>
 <script src="<%=basePath%>resources/js/jquery.min.js"></script>
