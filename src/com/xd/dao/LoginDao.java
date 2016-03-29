@@ -150,6 +150,7 @@ public class LoginDao {
     }
     //删除我的问题
     public MyQuestion deleteMyQuestion(int id){
+        System.out.println("deleteMyQuestion");
         Session session = sessionFactory.getCurrentSession();
         MyQuestion myQuestion = (MyQuestion) session.get(MyQuestion.class,id);
         session.delete(myQuestion);
