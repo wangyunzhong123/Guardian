@@ -121,6 +121,7 @@
                 /resources/*=anon
                 /addquestion=anon
                 /weChatFromChare=anon
+                /pages/other_center=anon
                 /pages/*=authc
                 /**=authc
             </value>

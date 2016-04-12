@@ -487,7 +487,7 @@
         url:'returnSignature',
         type:'post', //数据发送方式
         error: function(){ //失败
-            alert('发送ajaxreturnSignature请求失败');
+           alert('发送ajaxreturnSignature请求失败');
         },
         success: function(msg){ //成功
             sign = msg;
@@ -522,8 +522,8 @@
         wx.onMenuShareAppMessage({
             title: '哈哈,这是我的主页,欢迎来访.', // 分享标题
             desc: '在应用中，常用诸如点、圆等简单的几何对象代表现实世界中的实体。在涉及这些几何对象的问题中', // 分享描述
-            link: '', // 分享链接
-            imgUrl: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8db58af5e05d7ca6&redirect_uri=http%3a%2f%2fqbt.feite.org%2fCupidDaydayOnline_war%2fweChatFromChare&response_type=code&scope=snsapi_base&state='+userid+'#wechat_redirect', // 分享图标
+            link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8db58af5e05d7ca6&redirect_uri=http%3a%2f%2fqbt.feite.org%2fCupidDaydayOnline_war%2fweChatFromChare&response_type=code&scope=snsapi_base&state='+userid+'#wechat_redirect', // 分享链接
+            imgUrl: '', // 分享图标
             type: '', // 分享类型,music、video或link，不填默认为link
             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {

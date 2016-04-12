@@ -66,52 +66,52 @@ public class LoginController {
      */
     @RequestMapping(value="weChatOauth",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView weChatOauth(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
-//        System.out.println("收到weChatOauth请求");
-//        logger.fatal("收到weChatOauth请求");
-//        String code = request.getParameter("code");
-//        String state = request.getParameter("state");
-//        logger.fatal("code:"+code);
-//        logger.fatal("state:"+state);
-//        System.out.println("code="+code);
-//        if (code.equals("authdeny")){
-//            logger.fatal("用户未授权");
-//            return null;
-//        }
-//        Map<String, String> map = new HashMap<String, String>();
-//        map.put("code", code);
-//        map.put("appid", "wx8db58af5e05d7ca6");
-//        map.put("secret", "d698d109e0bc69c09fbb4c5e2e843a3d");
-//        map.put("grant_type", "authorization_code");
-//        String result = sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", map);
-//        System.out.println("access_token==="+result);
-//        logger.fatal("access_token:"+result);
-//
-//        JSONObject object = new JSONObject(result);
-//        String openid = object.getString("openid");
-//        String access_token = object.getString("access_token");
-//        Map<String, String> map1 = new HashMap<String, String>();
-//        map1.put("access_token", access_token);
-//        map1.put("openid", openid);
-//        map1.put("lang", "zh_CN");
-//        String info = sendGet("https://api.weixin.qq.com/sns/userinfo", map1);
-//        System.out.println("info==="+info);
-//        logger.fatal("info:"+info);
-//
-//        JSONObject personInfo = new JSONObject(info);
-//        String nickname = personInfo.getString("nickname");
-//        String sex = personInfo.getString("sex");
-//        String language = personInfo.getString("language");
-//        String city = personInfo.getString("city");
-//        String province = personInfo.getString("province");
-//        String country = personInfo.getString("country");
-//        String headimgurl = personInfo.getString("headimgurl");
-//        String privilege = personInfo.getString("privilege");
+        System.out.println("收到weChatOauth请求");
+        logger.fatal("收到weChatOauth请求");
+        String code = request.getParameter("code");
+        String state = request.getParameter("state");
+        logger.fatal("code:"+code);
+        logger.fatal("state:"+state);
+        System.out.println("code="+code);
+        if (code.equals("authdeny")){
+            logger.fatal("用户未授权");
+            return null;
+        }
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("code", code);
+        map.put("appid", "wx8db58af5e05d7ca6");
+        map.put("secret", "d698d109e0bc69c09fbb4c5e2e843a3d");
+        map.put("grant_type", "authorization_code");
+        String result = sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", map);
+        System.out.println("access_token==="+result);
+        logger.fatal("access_token:"+result);
+
+        JSONObject object = new JSONObject(result);
+        String openid = object.getString("openid");
+        String access_token = object.getString("access_token");
+        Map<String, String> map1 = new HashMap<String, String>();
+        map1.put("access_token", access_token);
+        map1.put("openid", openid);
+        map1.put("lang", "zh_CN");
+        String info = sendGet("https://api.weixin.qq.com/sns/userinfo", map1);
+        System.out.println("info==="+info);
+        logger.fatal("info:"+info);
+
+        JSONObject personInfo = new JSONObject(info);
+        String nickname = personInfo.getString("nickname");
+        String sex = personInfo.getString("sex");
+        String language = personInfo.getString("language");
+        String city = personInfo.getString("city");
+        String province = personInfo.getString("province");
+        String country = personInfo.getString("country");
+        String headimgurl = personInfo.getString("headimgurl");
+        String privilege = personInfo.getString("privilege");
 
 //        //测试使用
-        String openid = "12345";
-        String nickname = "wang";
-        String sex = "男";
-        String city = "北京";
+//        String openid = "12345";
+//        String nickname = "wang";
+//        String sex = "男";
+//        String city = "北京";
 
         //完成个人信息请求,开始操作数据库
         User existUser=loginService.getUserByKey(openid);
@@ -172,6 +172,9 @@ public class LoginController {
             //则other_center页面,只显示基本信息,......
 
             //获取指定用户的info
+            existUser = new User("wang","s","s","s");
+            ShiroLoginUtil.login(existUser);
+
             User user = loginService.getUserById(Integer.valueOf(state));
             User_to user_to = user.getUser_to();
             List<MyQuestion> myQuestionsSet = user.getItems();
@@ -181,13 +184,16 @@ public class LoginController {
             session.setAttribute("user_to",user_to);
             session.setAttribute("myquestionlist",myQuestionsSet);
             session.setAttribute("type",0);//0表示里面的择偶条件和我问你答tab指向关注引导,
-            return new ModelAndView("other_center");
+            return new ModelAndView("pages/other_center");
         }else{//该用户授权过
+            ShiroLoginUtil.login(existUser);
+
             if(existUser.getId() == Integer.valueOf(state)){//是本人
-                ShiroLoginUtil.login(existUser);
+//                ShiroLoginUtil.login(existUser);
                 return new ModelAndView("redirect:/getuser");
             }else{//已经注册的外人看的
                 //获取指定用户的info
+
                 User user = loginService.getUserById(Integer.valueOf(state));
                 User_to user_to = user.getUser_to();
                 List<MyQuestion> myQuestionsSet = user.getItems();
@@ -196,7 +202,7 @@ public class LoginController {
                 session.setAttribute("user_to",user_to);
                 session.setAttribute("myquestionlist",myQuestionsSet);
                 session.setAttribute("type",1);//1表示里面的基本信息,择偶条件,均可见,我问你答tab浏览者已经回答的问题可以直接看答案,否则...
-                return new ModelAndView("other_center");
+                return new ModelAndView("pages/other_center");
             }
         }
     }
