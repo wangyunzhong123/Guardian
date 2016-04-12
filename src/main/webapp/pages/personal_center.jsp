@@ -437,12 +437,13 @@
     </div>
     <%--自我推广按钮--%>
     <div class="line_begin_3">
-        <a href="javascript:;" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">自我推广</a>
+        <a href="javascript:to_adb(<%=user.getId()%>);" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">分享给朋友</a>
     </div>
 </body>
 <script src="<%=basePath%>resources/js/jquery.min.js"></script>
 <script src="<%=basePath%>resources/js/bootstrap.min.js"></script>
 <script src="<%=basePath%>resources/js/zoom.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
     $(function(){
         $(document.getElementById("tab12")).hide();
@@ -479,6 +480,62 @@
 
     })
 
+    //微信配置
+    //先ajax请求所需的参数
+    var sign='';
+    $.ajax({
+        url:'returnSignature',
+        type:'post', //数据发送方式
+        error: function(){ //失败
+            alert('发送ajaxreturnSignature请求失败');
+        },
+        success: function(msg){ //成功
+            sign = msg;
+        }
+    });
+    wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: 'wx8db58af5e05d7ca6', // 必填，公众号的唯一标识
+        timestamp: '2341243534', // 必填，生成签名的时间戳
+        nonceStr: 'sfsdgsdfwet43gds3554tsg54', // 必填，生成签名的随机串
+        signature: sign,// 必填，签名，见附录1
+        jsApiList: [
+                'onMenuShareTimeline',//分享到朋友圈
+                'onMenuShareAppMessage',//分享给朋友
+                'onMenuShareQQ',//分享到QQ
+                'onMenuShareWeibo',//腾讯微博
+                'onMenuShareQZone',//空间
+                'chooseImage',//拍照或从手机相册中选图接口
+                'previewImage',//预览图片接口
+                'uploadImage',//上传图片接口
+                'downloadImage'//下载图片
+        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+    wx.ready(function(){
+       alert("config成功");
+    });
+    wx.error(function(){
+       alert("config失败");
+    });
+    //个人推广按钮
+    function to_adb(userid){
+        wx.onMenuShareAppMessage({
+            title: '哈哈,这是我的主页,欢迎来访.', // 分享标题
+            desc: '在应用中，常用诸如点、圆等简单的几何对象代表现实世界中的实体。在涉及这些几何对象的问题中', // 分享描述
+            link: '', // 分享链接
+            imgUrl: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8db58af5e05d7ca6&redirect_uri=http%3a%2f%2fqbt.feite.org%2fCupidDaydayOnline_war%2fweChatFromChare&response_type=code&scope=snsapi_base&state='+userid+'#wechat_redirect', // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+                alert("分享成功");
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+                alert("分享失败");
+            }
+        });
+    }
     function tab_change(which){
         var $tab1 = $(document.getElementById("tab11"));
         var $tab2 = $(document.getElementById("tab12"));

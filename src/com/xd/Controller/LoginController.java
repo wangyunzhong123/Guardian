@@ -1,9 +1,11 @@
 package com.xd.Controller;
 
+import com.xd.entity.MyQuestion;
 import com.xd.entity.User;
 import com.xd.entity.User_to;
 import com.xd.service.LoginService;
 import com.xd.shiro.ShiroLoginUtil;
+import com.xd.util.MyCache;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -155,11 +158,47 @@ public class LoginController {
                         如果未注册,则里面的择偶条件和我问你答tab指向关注引导,
      如果是自己进入,则正常进入个人主页
      */
+
     @RequestMapping(value="weChatFromChare",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView weChatFromChare(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
-//        return new ModelAndView("redirect:/getotheruser");
-        return new ModelAndView("other_center");
+        //可以直接获取openid
+        String openid = request.getParameter("openid");
+        String state = request.getParameter("state");//就是要查看用户的id
+        logger.fatal("weChatFromChare获取的openid= :"+openid+"  "+state);
+
+        User existUser=loginService.getUserByKey(openid);
+        if(existUser == null){//表示该用户还没授权(我们的实现流程是,只要授权,就自动使用openid为该用户注册,注册)
+            //则other_center页面,只显示基本信息,......
+
+            //获取指定用户的info
+            User user = loginService.getUserById(Integer.valueOf(state));
+            User_to user_to = user.getUser_to();
+            List<MyQuestion> myQuestionsSet = user.getItems();
+            System.out.println("请求到的myQuestionsSet个数是  "+myQuestionsSet.size());
+            HttpSession session = request.getSession();
+            session.setAttribute("user",user);
+            session.setAttribute("user_to",user_to);
+            session.setAttribute("myquestionlist",myQuestionsSet);
+            session.setAttribute("type",0);//0表示里面的择偶条件和我问你答tab指向关注引导,
+            return new ModelAndView("other_center");
+        }else{//该用户授权过
+            if(existUser.getId() == Integer.valueOf(state)){//是本人
+                ShiroLoginUtil.login(existUser);
+                return new ModelAndView("redirect:/getuser");
+            }else{//已经注册的外人看的
+                //获取指定用户的info
+                User user = loginService.getUserById(Integer.valueOf(state));
+                User_to user_to = user.getUser_to();
+                List<MyQuestion> myQuestionsSet = user.getItems();
+                HttpSession session = request.getSession();
+                session.setAttribute("user",user);
+                session.setAttribute("user_to",user_to);
+                session.setAttribute("myquestionlist",myQuestionsSet);
+                session.setAttribute("type",1);//1表示里面的基本信息,择偶条件,均可见,我问你答tab浏览者已经回答的问题可以直接看答案,否则...
+                return new ModelAndView("other_center");
+            }
+        }
     }
 
     /**
@@ -249,6 +288,16 @@ public class LoginController {
         response.getWriter().print(result);
         response.getWriter().flush();
         response.getWriter().close();
+    }
+
+    //前端使用JSSDK需要获取签名,签名由后台生成,并有一定的实
+    // 效性,为2个小时.所以还要做服务器端缓存,时间问两个小时,超过就重新获取
+    @RequestMapping(value="returnSignature",method = {RequestMethod.POST,RequestMethod.GET})
+    public void returnSignature(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException{
+
+        response.getOutputStream().write(MyCache.getInstance().signature.getBytes("utf-8"));
+        logger.fatal("请求的returnSignature,返回 "+MyCache.getInstance().signature);
+
     }
 
 }

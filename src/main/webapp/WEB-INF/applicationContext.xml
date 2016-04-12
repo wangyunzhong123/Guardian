@@ -120,6 +120,7 @@
                 /weChatOauth=anon
                 /resources/*=anon
                 /addquestion=anon
+                /weChatFromChare=anon
                 /pages/*=authc
                 /**=authc
             </value>

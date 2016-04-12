@@ -193,13 +193,16 @@
         <div class="img-content-id"><span>ID:32443563</span></div>
 
     </div>
+    <%
+        Integer type = (Integer)session.getAttribute("type");
+    %>
     <%--导航栏--%>
     <div width="100%" class="cate_tab">
-        <input id="tab1" type="radio" name="tabs" checked onclick="tab_change(0)">
+        <input id="tab1" type="radio" name="tabs" checked onclick="tab_change(0,<%=type%>)">
         <label for="tab1">基本信息</label>
-        <input id="tab2" type="radio" name="tabs" onclick="tab_change(1)">
+        <input id="tab2" type="radio" name="tabs" onclick="tab_change(1,<%=type%>)">
         <label for="tab2">择偶条件</label>
-        <input id="tab3" type="radio" name="tabs" onclick="tab_change(2)">
+        <input id="tab3" type="radio" name="tabs" onclick="tab_change(2,<%=type%>)">
         <label for="tab3">我问你答</label>
         <a></a>
     </div>
@@ -319,13 +322,13 @@
         <div class="diver">
         </div>
 
-        <div class="line_begin_2">
-            <%--<button type="button" width="50%" class="btn btn-primary">--%>
-            <%--编辑修改--%>
-            <%--</button>--%>
-            <a href="<%=basePath%>pages/edit_personalinfo.jsp" class="weui_btn weui_btn_primary">编辑修改</a>
+        <%--<div class="line_begin_2">--%>
+            <%--&lt;%&ndash;<button type="button" width="50%" class="btn btn-primary">&ndash;%&gt;--%>
+            <%--&lt;%&ndash;编辑修改&ndash;%&gt;--%>
+            <%--&lt;%&ndash;</button>&ndash;%&gt;--%>
+            <%--<a href="<%=basePath%>pages/edit_personalinfo.jsp" class="weui_btn weui_btn_primary">编辑修改</a>--%>
 
-        </div>
+        <%--</div>--%>
 
     </div>
 
@@ -398,12 +401,12 @@
                 给自己消耗在该片中的众多脑细胞一个交待喽。${user_to.tell_to}</p>
         </div>
 
-        <div class="line_begin_2">
-            <%--<button type="button" width="50%" class="btn btn-primary">--%>
-            <%--编辑修改--%>
-            <%--</button>--%>
-            <a href="<%=basePath%>pages/edit_user_to.jsp" class="weui_btn weui_btn_primary">编辑修改</a>
-        </div>
+        <%--<div class="line_begin_2">--%>
+            <%--&lt;%&ndash;<button type="button" width="50%" class="btn btn-primary">&ndash;%&gt;--%>
+            <%--&lt;%&ndash;编辑修改&ndash;%&gt;--%>
+            <%--&lt;%&ndash;</button>&ndash;%&gt;--%>
+            <%--<a href="<%=basePath%>pages/edit_user_to.jsp" class="weui_btn weui_btn_primary">编辑修改</a>--%>
+        <%--</div>--%>
 
 
     </div>
@@ -437,14 +440,14 @@
 </div>
 <%--自我推广按钮--%>
 <div class="line_begin_3">
-    <a href="javascript:;" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">自我推广</a>
+    <a href="javascript:;" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">关注ta</a>
 </div>
 </body>
 <script src="<%=basePath%>resources/js/jquery.min.js"></script>
 <script src="<%=basePath%>resources/js/bootstrap.min.js"></script>
 <script src="<%=basePath%>resources/js/zoom.min.js"></script>
 <script type="text/javascript">
-    $(function(){
+    $(function(){//初始化
         $(document.getElementById("tab12")).hide();
         $(document.getElementById("tab13")).hide();
 
@@ -479,10 +482,14 @@
 
     })
 
-    function tab_change(which){
+    function tab_change(which,type){
         var $tab1 = $(document.getElementById("tab11"));
         var $tab2 = $(document.getElementById("tab12"));
         var $tab3 = $(document.getElementById("tab13"));
+        if(which!=0 && type ==0){
+            alert("请先关注公众号!");
+            return;
+        }
         switch(which){
             case 0:
                 $tab1.show();
