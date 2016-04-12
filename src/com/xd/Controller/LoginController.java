@@ -141,13 +141,25 @@ public class LoginController {
             user_to.setUser(user);
             loginService.addUser_to(user_to);
 
-
             ShiroLoginUtil.login(user);
             return new ModelAndView("redirect:/getuser");
         }
 
         System.out.println("!!!!!!!!!!!!");
         return null;
+    }
+
+    /***
+     * 标志是个人进入个人主页,还是别人根据分享链接进来的,
+     如果是别人的分享链接,如果已注册,则打开other_center.jsp,里面的基本信息,择偶条件,均可见,我问你答tab浏览者已经回答的问题可以直接看答案,否则...
+                        如果未注册,则里面的择偶条件和我问你答tab指向关注引导,
+     如果是自己进入,则正常进入个人主页
+     */
+    @RequestMapping(value="weChatFromChare",method={RequestMethod.POST,RequestMethod.GET})
+    public ModelAndView weChatFromChare(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+
+//        return new ModelAndView("redirect:/getotheruser");
+        return new ModelAndView("other_center");
     }
 
     /**

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.SystemEnvironmentPropertySource;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +20,25 @@ import java.util.List;
  */
 @Repository("loginDao")
 @Transactional
-public class LoginDao {
+public class LoginDao extends HibernateDaoSupport{
 
     @Autowired
     @Qualifier("sessionFactory")
     SessionFactory sessionFactory;
 
+    @Autowired
+    public void setSessionFactoryOverride(SessionFactory sessionFactory){
+        super.setSessionFactory(sessionFactory);
+    }
+
 
     //向题库中添加问题
     public void addQuestion(Question question){
         System.out.println("进去到addQuestion");
-        Session session = sessionFactory.getCurrentSession();
-        session.save(question);
+//        Session session = sessionFactory.getCurrentSession();
+//        session.save(question);
+
+        getHibernateTemplate().save(question);
     }
 
     //向题库中添加问题item
@@ -148,13 +156,18 @@ public class LoginDao {
         session.clear();
         return myQuestion;
     }
+    //查找我的问题
+    public MyQuestion getMyQuestionById(int id){
+        return getHibernateTemplate().get(MyQuestion.class,id);
+    }
     //删除我的问题
-    public MyQuestion deleteMyQuestion(int id){
+    public MyQuestion deleteMyQuestion(MyQuestion myQuestion){
         System.out.println("deleteMyQuestion");
-        Session session = sessionFactory.getCurrentSession();
-        MyQuestion myQuestion = (MyQuestion) session.get(MyQuestion.class,id);
-        session.delete(myQuestion);
-        return myQuestion;
+//        Session session = sessionFactory.getCurrentSession();
+//        MyQuestion myQuestion = (MyQuestion) session.get(MyQuestion.class,id);
+//        session.delete(myQuestion);
+        getHibernateTemplate().delete(myQuestion);
+        return null;
     }
 
     //跟新我的题目

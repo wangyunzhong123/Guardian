@@ -1,6 +1,8 @@
 package com.xd.entity;
 
 
+import org.apache.commons.logging.Log;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -215,6 +217,18 @@ public class User {
 
     public void setItems(List<MyQuestion> items) {
         this.items = items;
+    }
+    //
+    public void deleteQuestionItems(int id){
+        for(int i=0;i<items.size();i++){
+            if(items.get(i).getId() == id){
+                items.get(i).setUser(null);
+                items.remove(i);
+                System.out.println("删除我的问题index=  "+i);
+
+            }
+
+        }
     }
     /*
     该方法用于向里面添加item

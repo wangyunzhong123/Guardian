@@ -76,8 +76,12 @@ public class LoginService {
         return userDao.updateMyQuestion(myQuestion);
     }
     //删除我的问题
-    public MyQuestion deleteMyQuestion(int id){
-        return userDao.deleteMyQuestion(id);
+    public MyQuestion deleteMyQuestion(MyQuestion myQuestion){
+        return userDao.deleteMyQuestion(myQuestion);
+    }
+    //查找我的问题
+    public MyQuestion getMyQuestionById(int id){
+        return userDao.getMyQuestionById(id);
     }
 
 }

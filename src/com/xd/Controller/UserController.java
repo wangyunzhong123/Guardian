@@ -86,6 +86,12 @@ public class UserController {
 
         return new ModelAndView("pages/personal_center");
     }
+    //分享后,获取其他人的信息页面
+    @RequestMapping(value = "getotheruser",method={RequestMethod.POST,RequestMethod.GET})
+    public ModelAndView getotheruser(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+
+        return new ModelAndView("pages/personal_center");
+    }
 
     //获取重答的我的题目页面
     @RequestMapping(value="editmyquestion",method={RequestMethod.POST,RequestMethod.GET})
@@ -113,7 +119,15 @@ public class UserController {
     //删除我的题目
     @RequestMapping(value="deletemyquestion",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView deletemyquestion (int myquestionid,HttpServletRequest request, HttpServletResponse response){
-        loginService.deleteMyQuestion(myquestionid);
+        MyQuestion myQuestion = loginService.getMyQuestionById(myquestionid);
+        myQuestion.setUser(null);
+        loginService.deleteMyQuestion(myQuestion);
+
+        User user1 = ShiroLoginUtil.getCurrentUser();
+        User user = loginService.getUserByKey(user1.getPassword());
+        user.deleteQuestionItems(myquestionid);
+        loginService.addUser(user);
+
         return new ModelAndView("redirect:/getuser");
     }
     //编辑我的题目保存
@@ -234,9 +248,10 @@ public class UserController {
         }
         Question question = loginService.getQuestionByid(questionid);
         MyQuestion myQuestion = new MyQuestion(question.getId(),question.getTitle());
-        myQuestion.setUser(user);
-//        loginService.addUser(user);
-        loginService.addMyQuestion(myQuestion);
+//        myQuestion.setUser(user);
+        user.addQuestionItem(myQuestion);
+        loginService.addUser(user);
+//        loginService.addMyQuestion(myQuestion);
 
         response.getOutputStream().write("添加成功".getBytes("utf-8"));
     }

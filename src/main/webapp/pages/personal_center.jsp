@@ -51,7 +51,7 @@
 
     <style type="text/css">
 
-        .cate_tab{-moz-box-pack: justify;-webkit-box-pack: justify;-webkit-box-lines: single|multiple;
+        .cate_tab{-moz-box-pack: justify;-webkit-box-pack: justify;-webkit-box-lines: single;
             align-content: center;
         }
         .cate_tab li{width: 33% ;text-align:center}
