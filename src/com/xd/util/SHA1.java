@@ -170,8 +170,8 @@ public class SHA1 {
     // 将字节转换为十六进制字符串
     private static String byteToHexString(byte ib) {
         char[] Digit = {
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
-                'D', 'E', 'F'
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c',
+                'd', 'e', 'f'
         };
         char[] ob = new char[2];
         ob[0] = Digit[(ib >>> 4) & 0X0F];
@@ -217,8 +217,9 @@ public class SHA1 {
         System.out.println(data);
         String digest = new SHA1().getDigestOfString(data.getBytes());
         System.out.println(digest);
+        System.out.println(new SHA1().getDigestOfString(("jsapi_ticket="+"kgt8ON7yVITDhtdwci0qecUncJaXCyyUtW0BVk_Brd7VB5rQt1mqdR9AbXUtDfxJIVbeY73v8mvDAx8dfWO9Sg"+"&noncestr="+"sfsdgsdfwet43gds3554tsg54"+"&timestamp="+"2341243534"+"&url="+"http://qbt.feite.org/CupidDaydayOnline_war/getuser").getBytes()));
 
-        timer3();
+//        timer3();
 
         // System.out.println( ToMD5.convertSHA1(data).toUpperCase());
     }

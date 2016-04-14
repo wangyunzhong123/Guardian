@@ -28,10 +28,10 @@ public class MyCache {
     //获取
     public static String getTicket_Ticket_Url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
 
-    private static String noncestr="sfsdgsdfwet43gds3554tsg54";//随机字符串
+    private static String noncestr="sfsdgsdfwet43gds";//随机字符串
     private static String jsapi_ticket;//
-    private static String timestamp="2341243534";//时间戳
-    private static String url = "http://qbt.feite.org/CupidDaydayOnline_war/getuser";//
+    public static String timestamp = "";//时间戳
+    public static String url = "http://qbt.feite.org/CupidDaydayOnline_war/getuser";//
 
     public static String signature;//生成的签名
 
@@ -66,15 +66,19 @@ public class MyCache {
                 }
                 //
                 jsapi_ticket = temp;
+                timestamp = String.valueOf(System.currentTimeMillis()/1000);
                 //拼接
-                temp = "jsapi_ticket="+jsapi_ticket+"&noncestr="+noncestr+"&timestamp="+timestamp+"&url="+url;
+                temp = "jsapi_ticket="+jsapi_ticket+
+                        "&noncestr="+noncestr+
+                        "&timestamp="+timestamp+
+                        "&url="+url;
 
                 //得到签名
                 signature = new SHA1().getDigestOfString(temp.getBytes());
                 logger.fatal("获取jssDK的 signature: "+signature);
 
             }
-        }, 1000, 1000*3600*2);
+        }, 100, 1000*3600*2);
     }
 
     private static MyCache myCache = new MyCache();

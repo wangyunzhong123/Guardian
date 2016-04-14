@@ -301,8 +301,10 @@ public class LoginController {
     @RequestMapping(value="returnSignature",method = {RequestMethod.POST,RequestMethod.GET})
     public void returnSignature(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException{
 
+        String url = request.getParameter("url");
+        MyCache.url = url;
         response.getOutputStream().write(MyCache.getInstance().signature.getBytes("utf-8"));
-        logger.fatal("请求的returnSignature,返回 "+MyCache.getInstance().signature);
+        logger.fatal("请求的returnSignature,返回 "+MyCache.getInstance().signature+"  url= "+url);
 
     }
 

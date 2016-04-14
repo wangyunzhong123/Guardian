@@ -483,21 +483,30 @@
     //微信配置
     //先ajax请求所需的参数
     var sign='';
+    var url = location.href.split('#')[0];
+    alert(url);
+    alert(encodeURIComponent(location.href.split('#')[0]));
     $.ajax({
         url:'returnSignature',
         type:'post', //数据发送方式
-        error: function(){ //失败
-           alert('发送ajaxreturnSignature请求失败');
-        },
+        data:"url="+encodeURIComponent(location.href.split('#')[0]), //要传递的数据
         success: function(msg){ //成功
             sign = msg;
+            alert("成功"+sign);
+        },
+        error: function(){ //失败
+           alert('发送ajaxreturnSignature请求失败');
         }
     });
+    <%
+        String timestamp = (String)session.getAttribute("timestamp");
+    %>
+    alert("时间戳= "+<%=timestamp%>);
     wx.config({
         debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: 'wx8db58af5e05d7ca6', // 必填，公众号的唯一标识
-        timestamp: '2341243534', // 必填，生成签名的时间戳
-        nonceStr: 'sfsdgsdfwet43gds3554tsg54', // 必填，生成签名的随机串
+        timestamp: <%=timestamp%>, // 必填，生成签名的时间戳
+        nonceStr: 'sfsdgsdfwet43gds', // 必填，生成签名的随机串
         signature: sign,// 必填，签名，见附录1
         jsApiList: [
                 'onMenuShareTimeline',//分享到朋友圈
@@ -519,6 +528,7 @@
     });
     //个人推广按钮
     function to_adb(userid){
+        alert("点击了分享到朋友按钮");
         wx.onMenuShareAppMessage({
             title: '哈哈,这是我的主页,欢迎来访.', // 分享标题
             desc: '在应用中，常用诸如点、圆等简单的几何对象代表现实世界中的实体。在涉及这些几何对象的问题中', // 分享描述

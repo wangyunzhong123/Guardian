@@ -3,6 +3,7 @@ package com.xd.Controller;
 import com.xd.entity.*;
 import com.xd.service.LoginService;
 import com.xd.shiro.ShiroLoginUtil;
+import com.xd.util.MyCache;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,6 +84,8 @@ public class UserController {
         session.setAttribute("user",user);
         session.setAttribute("user_to",user_to);
         session.setAttribute("myquestionlist",myQuestionsSet);
+        //时间戳
+        session.setAttribute("timestamp", MyCache.timestamp);
 
         return new ModelAndView("pages/personal_center");
     }
