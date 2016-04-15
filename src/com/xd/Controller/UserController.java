@@ -4,6 +4,7 @@ import com.xd.entity.*;
 import com.xd.service.LoginService;
 import com.xd.shiro.ShiroLoginUtil;
 import com.xd.util.MyCache;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class UserController {
     @Resource(name="loginService")
     LoginService loginService;
 
+    private static final Logger logger = Logger.getLogger(LoginController.class);
 
     /*新增用户*/
     @RequestMapping(value="adduser",method={RequestMethod.POST,RequestMethod.GET})
@@ -272,5 +274,71 @@ public class UserController {
 
     }
 
+    //删除我的心仪对象
+    @RequestMapping(value="deletemylover",method={RequestMethod.POST,RequestMethod.GET})
+    public ModelAndView deletemylover (int myuser_id,int otheruser_id,int myloverid,HttpServletRequest request, HttpServletResponse response)throws JSONException, IOException {
+        User myuser = loginService.getUserById(myuser_id);
+        User otheruser = loginService.getUserById(otheruser_id);
+        MyLover myLover = loginService.getMyLoverById(myloverid);
+        myLover.setUser(null);
+        loginService.deleteMyLover(myLover);
 
-}
+        return refreshOther(myuser,otheruser,request,response);
+    }
+    //增加我的心仪对象
+    @RequestMapping(value="addmylove",method={RequestMethod.POST,RequestMethod.GET})
+    public ModelAndView addmylover(int myuser_id,int otheruser_id,HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+
+//        User user = ShiroLoginUtil.getCurrentUser();
+//        myQuestion.setUser(user);
+//        loginService.updateMyQuestion(myQuestion);
+        User myuser = loginService.getUserById(myuser_id);
+        User otheruser = loginService.getUserById(otheruser_id);
+        MyLover myLover = new MyLover(otheruser_id);
+        myLover.setName(otheruser.getName());
+        myLover.setAddress(otheruser.getAddress());
+        myLover.setBeizhu(otheruser.getDubai());
+        myLover.setEducation(otheruser.getEducation());
+        myLover.setIncome(otheruser.getIncome());
+        myLover.setUser(myuser);
+
+        loginService.addMyLover(myLover);
+
+//        myuser.addMyLoverList(myLover);
+
+        return refreshOther(myuser,otheruser,request,response);
+    }
+    //关注或者取消关注之后,重新载入页面
+    public ModelAndView refreshOther(User existUser,User user,HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+
+        User_to user_to = user.getUser_to();
+        List<MyQuestion> myQuestionsSet = user.getItems();
+        HttpSession session = request.getSession();
+        session.setAttribute("user",user);
+        session.setAttribute("user_to",user_to);
+        session.setAttribute("myquestionlist",myQuestionsSet);
+        //添加existuser的ListMyQUestion,用以对比显示
+        session.setAttribute("browseruser",existUser);
+        logger.fatal("refreshOther:browserquestionlist的个数是 "+existUser.getItems().size());
+        //1表示里面的基本信息,择偶条件,均可见,我问你答tab浏览者已经回答的问题可以直接看答案,否则...
+        session.setAttribute("type",1);
+//                request.setAttribute("type",1);
+        //判断是否已经关注
+        if(existUser.isexist(user)!= -1) {
+            request.setAttribute("flag", 1);//表明已经关注
+            request.setAttribute("myloverid",existUser.isexist(user));
+
+        }else{
+            request.setAttribute("flag",0);//没有关注
+//                    request.setAttribute("browseruserid",existUser.getId());
+//                    request.setAttribute("userid",user.getId());
+        }
+
+
+        return new ModelAndView("pages/other_center");
+    }
+
+
+
+
+    }

@@ -31,6 +31,7 @@ public class MyCache {
     private static String noncestr="sfsdgsdfwet43gds";//随机字符串
     private static String jsapi_ticket;//
     public static String timestamp = "";//时间戳
+//    public static String url = "http://qbt.feite.org/CupidDaydayOnline_war/getuser";//
     public static String url = "http://qbt.feite.org/CupidDaydayOnline_war/getuser";//
 
     public static String signature;//生成的签名

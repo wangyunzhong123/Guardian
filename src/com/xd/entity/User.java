@@ -2,6 +2,8 @@ package com.xd.entity;
 
 
 import org.apache.commons.logging.Log;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -209,6 +211,7 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.ALL},
             mappedBy = "user",fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<MyQuestion> items = new ArrayList<MyQuestion>();
 
     public List<MyQuestion> getItems() {
@@ -238,17 +241,71 @@ public class User {
         this.items.add(item);
     }
 
+    //我的心仪对象
+    @OneToMany(cascade = {CascadeType.ALL},
+            mappedBy = "user",fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<MyLover> myLoverList = new ArrayList<MyLover>();
+
+    public List<MyLover> getMyLoverList() {
+        return myLoverList;
+    }
+
+    public void setMyLoverList(List<MyLover> items) {
+        this.myLoverList = items;
+    }
+    //
+    public void deleteMyLoverList(int id){
+        for(int i=0;i<myLoverList.size();i++){
+            if(items.get(i).getId() == id){
+                items.get(i).setUser(null);
+                items.remove(i);
+                System.out.println("删除我的问题index=  "+i);
+
+            }
+
+        }
+    }
+    /*
+    该方法用于心仪对象
+    * */
+    public void addMyLoverList(MyLover item){
+        item.setUser(this);
+        this.myLoverList.add(item);
+    }
+    /*
+    * 判断mylover是否已经关注
+    * */
+    public int isexist(User user){
+        for(MyLover myLover1:myLoverList){
+            if(myLover1.getPrim_id().equals(user.getId()))
+                return myLover1.getId();
+        }
+        return -1;
+    }
+
     /*
     判断当前题库中的question是否在我的question列表里面
     * */
     public boolean isexist(Question question){
         for(MyQuestion myQuestion:items){
-            if(myQuestion.getPrim_id() == question.getId())
+            if(myQuestion.getPrim_id().equals(question.getId()))
                 return true;
         }
         return false;
     }
 
+    /*
+    * 判断给定问题是否已在我的问题列表中,用于浏览其他用户信息是显示他们都回答过的问题答案
+    *
+    * */
+    public MyQuestion getCommonMyquestion(MyQuestion myQuestion){
+        for(MyQuestion myQuestion1:items){
+            if(myQuestion1.isexist(myQuestion))
+                return myQuestion1;
+        }
+        return null;
+    }
     @Override
     public String toString() {
         return "User{" +

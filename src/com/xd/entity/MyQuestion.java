@@ -107,5 +107,11 @@ public class MyQuestion {
         this.user = user;
     }
 
+    //判断当前问题是否和参数中的问题是同一个问题,用于在浏览其他用户信息是显示他们都回答过的问题
+    public boolean isexist(MyQuestion myQuestion){
+        if(this.getPrim_id().equals(myQuestion.getPrim_id()))
+            return true;
+        return false;
+    }
 
 }

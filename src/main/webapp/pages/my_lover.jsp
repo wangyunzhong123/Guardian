@@ -1,4 +1,6 @@
-<%--
+<%@ page import="com.xd.entity.MyLover" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %><%--
   Created by IntelliJ IDEA.
   User: tianxi
   Date: 16-3-18
@@ -17,8 +19,7 @@
     <title>心仪对象</title>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <%--, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui--%>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-title" content="">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta content="telephone=no" name="format-detection">
@@ -32,6 +33,11 @@
         .leftContent { position:absolute; top:2px; left:4px; }
         .leftContent img{ height:80px; width:100px; padding:2px; margin-top: 15px;}
         .rightContent { margin-left:120px;  margin-top: 10px;}
+        h2{
+            text-align: center;
+            align-content: center;
+            margin: 20% auto;
+        }
     </style>
 
 </head>
@@ -48,5 +54,12 @@
             </div>
         </div>
      </c:forEach>
+
+    <%
+        List<MyLover> myLoverList = (List<MyLover>)request.getAttribute("myloverlist");
+        if(myLoverList ==null || myLoverList.size() == 0){
+            out.print("<h2>你还没有添加过心仪对象,请从嘉宾推荐或者别人的分享添加关注!</h2>");
+        }
+    %>
 </body>
 </html>

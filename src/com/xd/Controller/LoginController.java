@@ -1,5 +1,6 @@
 package com.xd.Controller;
 
+import com.xd.entity.MyLover;
 import com.xd.entity.MyQuestion;
 import com.xd.entity.User;
 import com.xd.entity.User_to;
@@ -89,6 +90,12 @@ public class LoginController {
         JSONObject object = new JSONObject(result);
         String openid = object.getString("openid");
         String access_token = object.getString("access_token");
+        //根据state的值判断入口,心仪清单,推荐,恋爱基金
+        //state==1,是个人中心的入口
+        if(Integer.valueOf(state) != 1){
+            return commonEnter(Integer.valueOf(state),openid,request,response);
+        }
+
         Map<String, String> map1 = new HashMap<String, String>();
         map1.put("access_token", access_token);
         map1.put("openid", openid);
@@ -163,8 +170,20 @@ public class LoginController {
     public ModelAndView weChatFromChare(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
         //可以直接获取openid
-        String openid = request.getParameter("openid");
         String state = request.getParameter("state");//就是要查看用户的id
+
+        String code = request.getParameter("code");
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("code", code);
+        map.put("appid", "wx8db58af5e05d7ca6");
+        map.put("secret", "d698d109e0bc69c09fbb4c5e2e843a3d");
+        map.put("grant_type", "authorization_code");
+        String result = sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", map);
+        logger.fatal("weChatFromChare: access_token:"+result);
+
+        JSONObject object = new JSONObject(result);
+        String openid = object.getString("openid");
+
         logger.fatal("weChatFromChare获取的openid= :"+openid+"  "+state);
 
         User existUser=loginService.getUserByKey(openid);
@@ -172,24 +191,25 @@ public class LoginController {
             //则other_center页面,只显示基本信息,......
 
             //获取指定用户的info
-            existUser = new User("wang","s","s","s");
-            ShiroLoginUtil.login(existUser);
+//            existUser = new User("wang","s","s","s");
+//            ShiroLoginUtil.login(existUser);
 
             User user = loginService.getUserById(Integer.valueOf(state));
             User_to user_to = user.getUser_to();
             List<MyQuestion> myQuestionsSet = user.getItems();
-            System.out.println("请求到的myQuestionsSet个数是  "+myQuestionsSet.size());
+            logger.fatal("请求到的myQuestionsSet个数是  "+myQuestionsSet.size());
             HttpSession session = request.getSession();
             session.setAttribute("user",user);
             session.setAttribute("user_to",user_to);
             session.setAttribute("myquestionlist",myQuestionsSet);
             session.setAttribute("type",0);//0表示里面的择偶条件和我问你答tab指向关注引导,
+            request.setAttribute("type",0);
             return new ModelAndView("pages/other_center");
         }else{//该用户授权过
-            ShiroLoginUtil.login(existUser);
+            logger.fatal("根据openid获得用户不为空,name= "+existUser.getName()+" id= "+existUser.getId());
 
-            if(existUser.getId() == Integer.valueOf(state)){//是本人
-//                ShiroLoginUtil.login(existUser);
+            if(existUser.getId().equals(Integer.valueOf(state))){//是本人
+                ShiroLoginUtil.login(existUser);
                 return new ModelAndView("redirect:/getuser");
             }else{//已经注册的外人看的
                 //获取指定用户的info
@@ -201,7 +221,24 @@ public class LoginController {
                 session.setAttribute("user",user);
                 session.setAttribute("user_to",user_to);
                 session.setAttribute("myquestionlist",myQuestionsSet);
-                session.setAttribute("type",1);//1表示里面的基本信息,择偶条件,均可见,我问你答tab浏览者已经回答的问题可以直接看答案,否则...
+                //添加existuser的ListMyQUestion,用以对比显示
+                session.setAttribute("browseruser",existUser);
+                logger.fatal("browserquestionlist的个数是 "+existUser.getItems().size());
+                //1表示里面的基本信息,择偶条件,均可见,我问你答tab浏览者已经回答的问题可以直接看答案,否则...
+                session.setAttribute("type",1);
+//                request.setAttribute("type",1);
+                //判断是否已经关注
+                if(existUser.isexist(user)!= -1) {
+                    request.setAttribute("flag", 1);//表明已经关注
+                    request.setAttribute("myloverid",existUser.isexist(user));
+
+                }else{
+                    request.setAttribute("flag",0);//没有关注
+//                    request.setAttribute("browseruserid",existUser.getId());
+//                    request.setAttribute("userid",user.getId());
+                }
+
+
                 return new ModelAndView("pages/other_center");
             }
         }
@@ -306,6 +343,27 @@ public class LoginController {
         response.getOutputStream().write(MyCache.getInstance().signature.getBytes("utf-8"));
         logger.fatal("请求的returnSignature,返回 "+MyCache.getInstance().signature+"  url= "+url);
 
+    }
+
+    /*
+    * 心仪清单,推荐,恋爱基金的公共入口
+    * */
+
+    private ModelAndView commonEnter(int state,String openid,HttpServletRequest request, HttpServletResponse response){
+        User user=loginService.getUserByKey(openid);
+        if(user == null){//该用户还没注册
+            return new ModelAndView("pages/noregister");
+        }
+        if(state ==2){//心仪清单的入口
+            List<MyLover> myLoverList = user.getMyLoverList();
+            request.setAttribute("myloverlist",myLoverList);
+            return new ModelAndView("pages/my_lover");
+        }else if(state ==3){//推荐嘉宾的入口
+            return new ModelAndView("pages/to_commanduser");
+        }else if(state ==4){//我的恋爱基金的入口
+            return new ModelAndView("pages/my_foundation");
+        }
+        return null;
     }
 
 }

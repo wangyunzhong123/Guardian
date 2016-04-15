@@ -163,6 +163,7 @@
         .to_adb{
             position: fixed;
             bottom: 15px;
+            right: 10px;
             align-content: center;
             text-align: center;
         }
@@ -407,9 +408,6 @@
 
 
         </div>
-
-
-
         <%--tab3,,我问你答--%>
             <%
                 List<MyQuestion> myQuestionSet = (List<MyQuestion>)session.getAttribute("myquestionlist");
@@ -468,31 +466,22 @@
                 bt.innerHTML="更多";
             }
         }
-
-        /*控制点击图片放大浏览*/
-//    $("#img-1,#img-2,#img-3").imgbox({
-//      'speedIn'		: 0,
-//      'speedOut'		: 0,
-//      'alignment'		: 'center',
-//      'overlayShow'	: true,
-//      'allowMultiple'	: false
-//    });
-
-    })
+    });
 
     //微信配置
     //先ajax请求所需的参数
     var sign='';
     var url = location.href.split('#')[0];
-    alert(url);
-    alert(encodeURIComponent(location.href.split('#')[0]));
+//    alert(url);
+//    alert(encodeURIComponent(location.href.split('#')[0]));
     $.ajax({
         url:'returnSignature',
+        async:false,
         type:'post', //数据发送方式
         data:"url="+encodeURIComponent(location.href.split('#')[0]), //要传递的数据
         success: function(msg){ //成功
             sign = msg;
-            alert("成功"+sign);
+//            alert("成功"+sign);
         },
         error: function(){ //失败
            alert('发送ajaxreturnSignature请求失败');
@@ -501,9 +490,9 @@
     <%
         String timestamp = (String)session.getAttribute("timestamp");
     %>
-    alert("时间戳= "+<%=timestamp%>);
+    <%--alert("时间戳= "+<%=timestamp%>);--%>
     wx.config({
-        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: 'wx8db58af5e05d7ca6', // 必填，公众号的唯一标识
         timestamp: <%=timestamp%>, // 必填，生成签名的时间戳
         nonceStr: 'sfsdgsdfwet43gds', // 必填，生成签名的随机串
@@ -521,31 +510,19 @@
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
     wx.ready(function(){
-       alert("config成功");
+//       alert("config成功");
+        initAllApi();
     });
     wx.error(function(){
        alert("config失败");
     });
+
     //个人推广按钮
-    function to_adb(userid){
-        alert("点击了分享到朋友按钮");
-        wx.onMenuShareAppMessage({
-            title: '哈哈,这是我的主页,欢迎来访.', // 分享标题
-            desc: '在应用中，常用诸如点、圆等简单的几何对象代表现实世界中的实体。在涉及这些几何对象的问题中', // 分享描述
-            link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8db58af5e05d7ca6&redirect_uri=http%3a%2f%2fqbt.feite.org%2fCupidDaydayOnline_war%2fweChatFromChare&response_type=code&scope=snsapi_base&state='+userid+'#wechat_redirect', // 分享链接
-            imgUrl: '', // 分享图标
-            type: '', // 分享类型,music、video或link，不填默认为link
-            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-            success: function () {
-                // 用户确认分享后执行的回调函数
-                alert("分享成功");
-            },
-            cancel: function () {
-                // 用户取消分享后执行的回调函数
-                alert("分享失败");
-            }
-        });
+    function to_adb(userid) {
+        alert("请点击菜单中的分享按钮.");
     }
+
+
     function tab_change(which){
         var $tab1 = $(document.getElementById("tab11"));
         var $tab2 = $(document.getElementById("tab12"));
@@ -570,6 +547,77 @@
                 break;
 
         }
+    }
+    //初始化所有接口
+    function initAllApi(){
+        //分享给朋友
+        wx.onMenuShareAppMessage({
+            title: '这是我的主页,欢迎来访.', // 分享标题
+            desc: '我在丘比特在线,快来加入我们吧!昵称: <%=user.getName()%>;地址: <%=user.getAddress()%>;职业: <%=user.getCareer()%>;教育程度: <%=user.getEducation()%>', // 分享描述
+            link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8db58af5e05d7ca6&redirect_uri=http%3a%2f%2fqbt.feite.org%2fCupidDaydayOnline_war%2fweChatFromChare&response_type=code&scope=snsapi_base&state='+userid+'#wechat_redirect', // 分享链接
+            imgUrl: '<%=basePath%>resources/img/person.png', // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+//            alert("分享成功");
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+                alert("分享失败");
+            }
+        });
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+            title: '这是我的主页,欢迎来访.', // 分享标题
+            link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8db58af5e05d7ca6&redirect_uri=http%3a%2f%2fqbt.feite.org%2fCupidDaydayOnline_war%2fweChatFromChare&response_type=code&scope=snsapi_base&state='+userid+'#wechat_redirect', // 分享链接
+            imgUrl: '<%=basePath%>resources/img/person.png', // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+        //分享到QQ
+        wx.onMenuShareQQ({
+            title: '这是我的主页,欢迎来访.', // 分享标题
+            desc: '我在丘比特在线,快来加入我们吧!昵称: <%=user.getName()%>;地址: <%=user.getAddress()%>;职业: <%=user.getCareer()%>;教育程度: <%=user.getEducation()%>', // 分享描述
+            link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8db58af5e05d7ca6&redirect_uri=http%3a%2f%2fqbt.feite.org%2fCupidDaydayOnline_war%2fweChatFromChare&response_type=code&scope=snsapi_base&state='+userid+'#wechat_redirect', // 分享链接
+            imgUrl: '<%=basePath%>resources/img/person.png', // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+        //QQ空间
+        wx.onMenuShareQZone({
+            title: '这是我的主页,欢迎来访.', // 分享标题
+            desc: '我在丘比特在线,快来加入我们吧!昵称: <%=user.getName()%>;地址: <%=user.getAddress()%>;职业: <%=user.getCareer()%>;教育程度: <%=user.getEducation()%>', // 分享描述
+            link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8db58af5e05d7ca6&redirect_uri=http%3a%2f%2fqbt.feite.org%2fCupidDaydayOnline_war%2fweChatFromChare&response_type=code&scope=snsapi_base&state='+userid+'#wechat_redirect', // 分享链接
+            imgUrl: '<%=basePath%>resources/img/person.png', // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+        //腾讯微博
+        wx.onMenuShareWeibo({
+            title: '这是我的主页,欢迎来访.', // 分享标题
+            desc: '我在丘比特在线,快来加入我们吧!昵称: <%=user.getName()%>;地址: <%=user.getAddress()%>;职业: <%=user.getCareer()%>;教育程度: <%=user.getEducation()%>', // 分享描述
+            link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8db58af5e05d7ca6&redirect_uri=http%3a%2f%2fqbt.feite.org%2fCupidDaydayOnline_war%2fweChatFromChare&response_type=code&scope=snsapi_base&state='+userid+'#wechat_redirect', // 分享链接
+            imgUrl: '<%=basePath%>resources/img/person.png', // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
     }
 </script>
 </html>

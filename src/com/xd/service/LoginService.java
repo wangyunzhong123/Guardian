@@ -83,5 +83,17 @@ public class LoginService {
     public MyQuestion getMyQuestionById(int id){
         return userDao.getMyQuestionById(id);
     }
+    //增加我的心仪对象
+    public MyLover addMyLover(MyLover myLover){
+        return userDao.addMyLover(myLover);
+    }
+    //删除我的心仪对象
+    public MyLover deleteMyLover(MyLover myLover){
+        return userDao.deleteMyLover(myLover);
+    }
+    //查找我的心仪对象
+    public MyLover getMyLoverById(int id){
+        return userDao.getMyLoverById(id);
+    }
 
 }

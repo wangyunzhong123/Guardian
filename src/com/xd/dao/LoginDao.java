@@ -184,4 +184,23 @@ public class LoginDao extends HibernateDaoSupport{
         return my;
     }
 
+    //增加我的心仪对象
+    public MyLover addMyLover(MyLover myLover){
+        System.out.println("addMyLover");
+        logger.fatal("addMyLover ,id= "+myLover.getId()+" prim_id = "+myLover.getPrim_id());
+        getHibernateTemplate().saveOrUpdate(myLover);
+        return myLover;
+    }
+    //删除我的心仪对象
+    public MyLover deleteMyLover(MyLover myLover){
+        System.out.println("deleteMyLover");
+        logger.fatal("deleteMyLover ,id= "+myLover.getId()+" prim_id = "+myLover.getPrim_id());
+        getHibernateTemplate().delete(myLover);
+        return myLover;
+    }
+    //查找我的心仪对象
+    public MyLover getMyLoverById(int id){
+        return getHibernateTemplate().get(MyLover.class,id);
+    }
+
 }

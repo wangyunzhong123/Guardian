@@ -3,6 +3,7 @@
 <%@ page import="com.xd.entity.MyQuestion" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.InputMismatchException" %>
 <%--
   Created by IntelliJ IDEA.
   User: tianxi
@@ -163,6 +164,7 @@
         .to_adb{
             position: fixed;
             bottom: 15px;
+            right: 10px;
             align-content: center;
             text-align: center;
         }
@@ -416,11 +418,13 @@
     <%--tab3,,我问你答--%>
     <%
         List<MyQuestion> myQuestionSet = (List<MyQuestion>)session.getAttribute("myquestionlist");
+        User browseruser = (User)session.getAttribute("browseruser");
+
     %>
     <div id="tab13">
-        <div>
-            <a href="<%=basePath%>getquestionlist" class="tab3_add_question weui_btn weui_btn_mini weui_btn_primary">添加题目</a>
-        </div>
+        <%--<div>--%>
+            <%--<a href="<%=basePath%>getquestionlist" class="tab3_add_question weui_btn weui_btn_mini weui_btn_primary">添加题目</a>--%>
+        <%--</div>--%>
         <br/>
         <c:forEach items="<%=myQuestionSet%>" var="myquestion" varStatus="vs">
             <div class="tab3_question_title">
@@ -429,19 +433,33 @@
             <div class="tab3_question_answer">
                 <img src="<%=basePath%>resources/img/smile.jpg" alt="图标" class="tab3_question_img" />
                 <span >${myquestion.myanswer}</span>
-                <div class="tab3_question_reanswer">
-                    <a href="<%=basePath%>editmyquestion?question_prim_id=${myquestion.prim_id}&question_id=${myquestion.id}"
-                       class="weui_btn weui_btn_mini weui_btn_primary">重答</a>
-                </div>
+                <%--只有已经关注ta,且回答过的题目才能看到ta的答案--%>
+                <%
+                    Integer flag = Integer.valueOf(request.getParameter("flag"));
+
+                %>
+                <%--<div class="tab3_question_reanswer">--%>
+                    <%--<a href="<%=basePath%>editmyquestion?question_prim_id=${myquestion.prim_id}&question_id=${myquestion.id}"--%>
+                       <%--class="weui_btn weui_btn_mini weui_btn_primary">重答</a>--%>
+                <%--</div>--%>
             </div>
         </c:forEach>
     </div>
 
 </div>
 <%--自我推广按钮--%>
-<div class="line_begin_3">
-    <a href="javascript:;" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">关注ta</a>
-</div>
+    <c:if test="${flag == 1}">
+        <div class="line_begin_3">
+            <a href="javascript:to_cancelfocus(${myloverid});" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">取消关注</a>
+        </div>
+    </c:if>
+
+    <c:if test="${flag == 0}">
+        <div class="line_begin_3">
+            <a href="javascript:to_focus();" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">关注ta</a>
+        </div>
+    </c:if>
+
 </body>
 <script src="<%=basePath%>resources/js/jquery.min.js"></script>
 <script src="<%=basePath%>resources/js/bootstrap.min.js"></script>
@@ -487,7 +505,11 @@
         var $tab2 = $(document.getElementById("tab12"));
         var $tab3 = $(document.getElementById("tab13"));
         if(which!=0 && type ==0){
-            alert("请先关注公众号!");
+            window.location.href = "<%=basePath%>pages/contactme.jsp";
+            return;
+        }
+        if(which!=0 && type ==1){
+
             return;
         }
         switch(which){
@@ -509,6 +531,42 @@
             default:
                 break;
 
+        }
+    }
+
+    /*取消关注*/
+    function to_cancelfocus(myloverid){
+        if(confirm('确认取消关注吗?')){
+            $.ajax({
+                url:'deletemylover',
+                type:'post', //数据发送方式
+//                dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json)
+                data:"myuser_id="+'<%=browseruser.getId()%>'+"&otheruser_id"+'<%=user.getId()%>'+"&myloverid="+myloverid, //要传递的数据
+                success: function(msg){ //成功
+//                    alert(msg);
+                },
+                error: function(){ //失败
+//                    alert('失败');
+                }
+            });
+        }
+
+    }
+    /*关注*/
+    function to_focus(){
+        if(confirm('确认关注ta吗?')){
+            $.ajax({
+                url:'addmylove',
+                type:'post', //数据发送方式
+//                dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json)
+                data:"myuser_id="+'<%=browseruser.getId()%>'+"&otheruser_id"+'<%=user.getId()%>', //要传递的数据
+                success: function(msg){ //成功
+//                    alert(msg);
+                },
+                error: function(){ //失败
+//                    alert('失败');
+                }
+            });
         }
     }
 </script>
