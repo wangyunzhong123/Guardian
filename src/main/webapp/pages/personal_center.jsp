@@ -20,7 +20,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>丘比特天天在线</title>
+    <title>丘比特在线</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
@@ -472,7 +472,7 @@
     //先ajax请求所需的参数
     var sign='';
     var url = location.href.split('#')[0];
-//    alert(url);
+    alert(url);
 //    alert(encodeURIComponent(location.href.split('#')[0]));
     $.ajax({
         url:'returnSignature',
@@ -481,7 +481,7 @@
         data:"url="+encodeURIComponent(location.href.split('#')[0]), //要传递的数据
         success: function(msg){ //成功
             sign = msg;
-//            alert("成功"+sign);
+            alert("成功"+sign);
         },
         error: function(){ //失败
            alert('发送ajaxreturnSignature请求失败');
@@ -490,11 +490,11 @@
     <%
         String timestamp = (String)session.getAttribute("timestamp");
     %>
-    <%--alert("时间戳= "+<%=timestamp%>);--%>
+    alert("时间戳= "+<%=timestamp%>);
     wx.config({
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: 'wx8db58af5e05d7ca6', // 必填，公众号的唯一标识
-        timestamp: <%=timestamp%>, // 必填，生成签名的时间戳
+        timestamp: '<%=timestamp%>', // 必填，生成签名的时间戳
         nonceStr: 'sfsdgsdfwet43gds', // 必填，生成签名的随机串
         signature: sign,// 必填，签名，见附录1
         jsApiList: [
@@ -510,8 +510,9 @@
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
     wx.ready(function(){
-//       alert("config成功");
-        initAllApi();
+       alert("config成功");
+        var userid = '<%=user.getId()%>';
+        initAllApi(userid);
     });
     wx.error(function(){
        alert("config失败");
@@ -520,6 +521,7 @@
     //个人推广按钮
     function to_adb(userid) {
         alert("请点击菜单中的分享按钮.");
+//        initAllApi();
     }
 
 
@@ -549,7 +551,7 @@
         }
     }
     //初始化所有接口
-    function initAllApi(){
+    function initAllApi(userid){
         //分享给朋友
         wx.onMenuShareAppMessage({
             title: '这是我的主页,欢迎来访.', // 分享标题
