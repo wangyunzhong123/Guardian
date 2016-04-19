@@ -3,8 +3,10 @@ package com.xd.Controller;
 import com.xd.entity.*;
 import com.xd.service.LoginService;
 import com.xd.shiro.ShiroLoginUtil;
+import com.xd.util.HttpUtil;
 import com.xd.util.MyCache;
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,6 +81,7 @@ public class UserController {
 
         User_to user_to = user.getUser_to();
         List<MyQuestion> myQuestionsSet = user.getItems();
+        List<MyImg> myImgList = user.getMyImgList();
         System.out.println("请求到的myQuestionsSet个数是  "+myQuestionsSet.size());
 
         HttpSession session = request.getSession();
@@ -86,6 +89,12 @@ public class UserController {
         session.setAttribute("user",user);
         session.setAttribute("user_to",user_to);
         session.setAttribute("myquestionlist",myQuestionsSet);
+        session.setAttribute("myimglist",myImgList);
+        ArrayList imglist = new ArrayList();
+        for(int i=0;i<myImgList.size();i++){
+            imglist.add(myImgList.get(i).getUrl());
+        }
+        session.setAttribute("imglist",imglist);
 
 //        session.setAttribute("user",user);
 //        session.setAttribute("user_to",user_to);
@@ -269,18 +278,6 @@ public class UserController {
         response.getOutputStream().write("添加成功".getBytes("utf-8"));
     }
 
-    public void setMyquestion(HttpServletRequest request){
-
-        List<MyQuestion> myQuestion = new ArrayList<MyQuestion>();
-        myQuestion.add(new MyQuestion(1,"你喜欢吃苹果吗?","喜欢","都行","无关紧要"));
-        myQuestion.add(new MyQuestion(1,"你喜欢吃苹果吗?","喜欢","都行","无关紧要"));
-        myQuestion.add(new MyQuestion(1,"你喜欢吃苹果吗?","喜欢","都行","无关紧要"));
-        myQuestion.add(new MyQuestion(1,"你喜欢吃苹果吗?","喜欢","都行","无关紧要"));
-        myQuestion.add(new MyQuestion(1,"你喜欢吃苹果吗?","喜欢","都行","无关紧要"));
-        myQuestion.add(new MyQuestion(1,"你喜欢吃苹果吗?","喜欢","都行","无关紧要"));
-        request.setAttribute("questionlist",myQuestion);
-
-    }
 
     //删除我的心仪对象
     @RequestMapping(value="deletemylover",method={RequestMethod.POST,RequestMethod.GET})
@@ -317,6 +314,7 @@ public class UserController {
         myLover.setUser(myuser);
 
         loginService.addMyLover(myLover);
+        myuser.addMyLoverList(myLover);
 
 //        myuser.addMyLoverList(myLover);
 
@@ -358,7 +356,47 @@ public class UserController {
 
     }
 
+    //增加个人图片
+    @RequestMapping(value="addmyimg",method={RequestMethod.POST,RequestMethod.GET})
+    public ModelAndView addmyimg(String serverId,HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+        //serverId是微信上传图片后服务器返回的服务器id
+        //根据这个id下载图片到自己的服务器本地
 
 
-
+        return null;
     }
+
+    //删除图片,还没想好怎么实现
+
+    //更改背景和头像
+    @RequestMapping(value="changebgperson",method={RequestMethod.POST,RequestMethod.GET})
+    public void changebgperson(int flag,String serverId,HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+
+        String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token="+MyCache.access_token+"&media_id="+serverId;
+        byte[] btImg = HttpUtil.getImageFromNetByUrl(url);
+        if(null != btImg && btImg.length > 0){
+            logger.fatal("读取到：" + btImg.length + " 字节");
+//            String fileName = "百度.gif";
+            String filename=UUID.randomUUID().toString()+".jpg";
+            HttpUtil.writeImageToDisk(btImg, filename);
+            User user = ShiroLoginUtil.getCurrentUser();
+            if(flag ==0)
+                user.setBgimg(MyCache.img_url+filename);
+            if(flag ==1)
+                user.setPersonimg(MyCache.img_url+filename);
+            //flag==2表示上传的是个人图片
+            if(flag ==2){
+                MyImg myImg = new MyImg();
+                myImg.setUser(user);
+                myImg.setUrl(MyCache.img_url+filename);
+                user.addMyImg(myImg);
+            }
+            loginService.addUser(user);
+        }else{
+            logger.fatal("没有从该连接获得内容");
+        }
+        response.getOutputStream().write("成功".getBytes("utf-8"));
+    }
+
+
+}

@@ -19,6 +19,8 @@ import java.util.TimerTask;
 * 并每两个小时更新*/
 public class MyCache {
 
+    //配置上传图片在服务器的地址
+    public static String img_url = "http://qbt.feite.org:4000/img/";
     private static final Logger logger = Logger.getLogger(LoginController.class);
     public static String appid = "wx8db58af5e05d7ca6";
     public static String secret = "d698d109e0bc69c09fbb4c5e2e843a3d";
@@ -29,7 +31,7 @@ public class MyCache {
     public static String getTicket_Ticket_Url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
 
     private static String noncestr="sfsdgsdfwet43gds";//随机字符串
-    private static String access_token;
+    public static String access_token;
     private static String jsapi_ticket;//
     public static String timestamp = "";//时间戳
 //    public static String url = "http://qbt.feite.org/CupidDaydayOnline_war/getuser";//

@@ -3,6 +3,7 @@
 <%@ page import="com.xd.entity.MyQuestion" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.xd.entity.MyImg" %>
 <%--
   Created by IntelliJ IDEA.
   User: tianxi
@@ -180,18 +181,46 @@
         .tab3_question_img{width: 30px;height: 30px;}
         .tab3_question_reanswer{float:right; margin-right: 6%;}
         .tab3_add_question{float:right; margin-top: 4%; margin-right: 6%;width: 90px;}
+
+        .chosepersonimg {
+            margin: 10px auto;
+            background: transparent;
+        }
+        .imgimg{
+            position: fixed;
+            top: 30px;
+            right: 10px;
+        }
+
     </style>
 
 
 </head>
+
 <body>
+    <div class="imgimg">
+        <div class="chosepersonimg">
+            <button id="changepersonimg">更改头像</button>
+        </div>
+        <div class="chosepersonimg">
+            <button id="changebgimg">更改背景</button>
+        </div>
+        <div class="chosepersonimg">
+            <button id="uploadimg">上传图片</button>
+        </div>
+    </div>
+
     <div class="contentt">
         <%--上部分个人图片--%>
         <%--<h1><%=basePath%></h1>--%>
+            <%
+                User user = (User)session.getAttribute("user");
+            %>
+
             <div class="img-content">
                 <div class="img-content-img"><img class="img-circle " src="<%=basePath%>resources/img/person.png" width="110px" height="90px"></div>
-                <div class="img-content-name"><span>王二小</span></div>
-                <div class="img-content-id"><span>ID:32443563</span></div>
+                <div class="img-content-name"><span>${user.name}</span></div>
+                <div class="img-content-id"><span>${user.id}</span></div>
 
             </div>
             <%--导航栏--%>
@@ -206,14 +235,12 @@
             </div>
 
          <%--tab1--%>
-         <%
-             User user = (User)session.getAttribute("user");
-         %>
         <div id=tab11 class="container">
 
 
             <!--图片-->
-            <div class="img-photo" onclick="window.open('<%=basePath%>pages/browse_photos.jsp','_self')">
+            <%--<div class="img-photo" onclick="window.open('<%=basePath%>pages/browse_photos.jsp','_self')">--%>
+            <div class="img-photo" onclick="brower_photos();">
                 <span>相册</span>
                 <a><img id=img-1 class="img-rounded" width="75px" height="75px" src="<%=basePath%>resources/img/person1.jpg"></a>
                 <a><img id=img-2 class="img-rounded" width="75px" height="75px" src="<%=basePath%>resources/img/person2.jpg"></a>
@@ -221,10 +248,7 @@
             </div>
             <div class="diver_"></div>
             <div class="mycontent">
-                <p id = mycontent>小弟不才将这部时间被打乱的电影依照自己的理解，按事件所发生的先后顺序重
-                    新排列“剪辑”了一遍，一方面为了和网友们交流一
-                    下片中难以理解的情节，为还没看此片的朋友提供一些方便，另一方面也是为了
-                    给自己消耗在该片中的众多脑细胞一个交待喽。${user.dubai}</p>
+                <p id = mycontent>${user.dubai}</p>
                 <div style="float: right;margin-right: 15px;margin-bottom: 5px;padding-bottom: 10px;"><a id=moremycontent>更多</a></div>
             </div>
             <div style="width: 100%;padding:8px 0;align-content:center;background-color: #e5e5e5;margin: 5px auto">
@@ -393,10 +417,7 @@
             </div><div class="diver"></div>
             <div><span >对他/她说:</span></div>
             <div class="mycontent">
-                <p>小弟不才将这部时间被打乱的电影依照自己的理解，按事件所发生的先后顺序重
-                    新排列“剪辑”了一遍，一方面为了和网友们交流一
-                    下片中难以理解的情节，为还没看此片的朋友提供一些方便，另一方面也是为了
-                    给自己消耗在该片中的众多脑细胞一个交待喽。${user_to.tell_to}</p>
+                <p>${user_to.tell_to}</p>
             </div>
 
             <div class="line_begin_2">
@@ -465,8 +486,28 @@
                 text.innerHTML = str.substring(0,ll)+"...";
                 bt.innerHTML="更多";
             }
+        };
+
+        //初始化背景图和头像,以及个人图片
+        <%
+                List<MyImg> myimglist = (List<MyImg>)session.getAttribute("myimglist");
+        %>
+        //初始化个人照片
+        temp = <%=myimglist.size()%> ;
+        if(temp ==1){
+            $("#img-1").attr("src",<%=myimglist.get(0).getUrl()%>);
+        }
+        if(temp ==2){
+            $("#img-1").attr("src",<%=myimglist.get(0).getUrl()%>);
+            $("#img-2").attr("src",<%=myimglist.get(1).getUrl()%>);
+        }
+        if(temp ==3){
+            $("#img-1").attr("src",<%=myimglist.get(0).getUrl()%>);
+            $("#img-2").attr("src",<%=myimglist.get(1).getUrl()%>);
+            $("#img-3").attr("src",<%=myimglist.get(2).getUrl()%>);
         }
     });
+
 
     //微信配置
     //先ajax请求所需的参数
@@ -525,7 +566,96 @@
 //        initAllApi();
     }
 
+    var urls = ${imglist} ;
+    //利用jssdk预览图片
+    function brower_photos(){
+        wx.previewImage({
+            current: urls[0], // 当前显示图片的http链接
+            urls: urls // 需要预览的图片http链接列表
+        });
+    }
 
+
+    /*<div class="chosepersonimg">
+            <button id="changepersonimg">更改头像</button>
+            </div>
+            <div class="chosepersonimg">
+            <button id="changebgimg">更改背景</button>
+            </div>
+            <div class="chosepersonimg">
+            <button id="uploadimg">上传图片</button>
+            </div>*/
+
+    //更改背景
+    $("#changebgimg").click(function(){
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                //改变背景
+                $(".img-content").css("background-image","url("+res.localIds[0]+")");
+                startUploadImg(0,res.localIds[0]);
+            }
+        });
+    });
+    //改变头像
+    $("#changepersonimg").click(function(){
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                //改变背景
+                $(".img-circle").attr("src",res.localIds[0]);
+                startUploadImg(1,res.localIds[0]);
+            }
+        });
+    });
+    //上传个人图片
+    $("#uploadimg").click(function(){
+        wx.chooseImage({
+            count: 9, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                for(var i=0;i<res.localIds.length;i++){
+                    startUploadImg(2,res.localIds[i]);
+                }
+            }
+        });
+    });
+    //异步上传图片到微信服务器
+    function startUploadImg(flag,localid){
+        wx.uploadImage({
+            localId: localid, // 需要上传的图片的本地ID，由chooseImage接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: function (res) {
+                var serverId = res.serverId; // 返回图片的服务器端ID
+                //再调用自己服务器的请求,自己服务器下载
+                downloadImg(flag,serverId);
+            }
+        });
+    }
+
+    //异步请求自己的服务i器资源,下载到服务i器本地
+    function downloadImg(flag,serverId){
+        $.ajax({
+            url:'changebgperson',
+            type:'post', //数据发送方式
+//                dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json)
+            data:"flag="+flag+"&serverId="+serverId, //要传递的数据
+            success: function(msg){ //成功
+                alert(msg);
+            },
+            error: function(){ //失败
+//                    alert('失败');
+            }
+        });
+    }
     function tab_change(which){
         var $tab1 = $(document.getElementById("tab11"));
         var $tab2 = $(document.getElementById("tab12"));

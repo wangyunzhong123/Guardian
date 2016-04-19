@@ -59,6 +59,11 @@ public class User {
     @Column(name="dubai")
     private String dubai;//内心独白
 
+    @Column(name="personimg")
+    private String personimg;//个人头像
+    @Column(name="bgimg")
+    private String bgimg;//背景图片
+
 
     public Integer getId() {
         return id;
@@ -156,6 +161,21 @@ public class User {
         this.sex = sex;
     }
 
+    public String getPersonimg() {
+        return personimg;
+    }
+
+    public void setPersonimg(String personimg) {
+        this.personimg = personimg;
+    }
+
+    public String getBgimg() {
+        return bgimg;
+    }
+
+    public void setBgimg(String bgimg) {
+        this.bgimg = bgimg;
+    }
 
     public User(String name, String password, String sex, String birth,
                 String height, String education, String career, String income,
@@ -171,6 +191,7 @@ public class User {
         this.address = address;
         this.locate = locate;
         this.dubai = dubai;
+        //在这应该设置默认的背景和头像
     }
     public void setUser(String name, String sex, String birth,
                 String height, String education, String career, String income,
@@ -224,8 +245,9 @@ public class User {
     //
     public void deleteQuestionItems(int id){
         for(int i=0;i<items.size();i++){
-            if(items.get(i).getId() == id){
+            if(items.get(i).getId().equals(id)){
                 items.get(i).setUser(null);
+                int j;
                 items.remove(i);
                 System.out.println("删除我的问题index=  "+i);
 
@@ -257,7 +279,7 @@ public class User {
     //
     public void deleteMyLoverList(int id){
         for(int i=0;i<myLoverList.size();i++){
-            if(items.get(i).getId() == id){
+            if(items.get(i).getId().equals(id)){
                 items.get(i).setUser(null);
                 items.remove(i);
                 System.out.println("删除我的lover=  "+i);
@@ -306,6 +328,39 @@ public class User {
         }
         return null;
     }
+
+
+    //
+    //我的个人图片
+    @OneToMany(cascade = {CascadeType.ALL},
+            mappedBy = "user",fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<MyImg> myImgList = new ArrayList<MyImg>();
+
+    public List<MyImg> getMyImgList() {
+        return myImgList;
+    }
+
+    public void setMyImgList(List<MyImg> myImgList) {
+        this.myImgList = myImgList;
+    }
+    //增加个人图片
+    public void addMyImg(MyImg myImg){
+        myImg.setUser(this);
+        myImgList.add(myImg);
+    }
+    //删除个人图片
+    public void deleteMyImg(int myImgId){
+        for(int i=0;i<myImgList.size();i++){
+            int j;
+            if(items.get(i).getId().equals(id)){
+                items.get(i).setUser(null);
+                items.remove(i);
+                System.out.println("删除我的Img=  "+i);
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "User{" +
