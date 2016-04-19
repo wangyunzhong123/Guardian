@@ -86,6 +86,14 @@ public class UserController {
         session.setAttribute("user",user);
         session.setAttribute("user_to",user_to);
         session.setAttribute("myquestionlist",myQuestionsSet);
+
+//        session.setAttribute("user",user);
+//        session.setAttribute("user_to",user_to);
+//        session.setAttribute("myquestionlist",myQuestionsSet);
+//        session.setAttribute("type",0);//0表示里面的择偶条件和我问你答tab指向关注引导,
+//        request.setAttribute("type",0);
+//        return new ModelAndView("pages/other_center");
+
         //时间戳
         session.setAttribute("timestamp", MyCache.timestamp);
 
@@ -277,10 +285,15 @@ public class UserController {
     //删除我的心仪对象
     @RequestMapping(value="deletemylover",method={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView deletemylover (int myuser_id,int otheruser_id,int myloverid,HttpServletRequest request, HttpServletResponse response)throws JSONException, IOException {
+
+        logger.fatal("收到取消关注请求!!"+myuser_id+"  "+otheruser_id+"  "+myloverid);
+
         User myuser = loginService.getUserById(myuser_id);
         User otheruser = loginService.getUserById(otheruser_id);
         MyLover myLover = loginService.getMyLoverById(myloverid);
         myLover.setUser(null);
+        //从myuser中删除
+        myuser.deleteMyLoverList(myloverid);
         loginService.deleteMyLover(myLover);
 
         return refreshOther(myuser,otheruser,request,response);
@@ -292,6 +305,7 @@ public class UserController {
 //        User user = ShiroLoginUtil.getCurrentUser();
 //        myQuestion.setUser(user);
 //        loginService.updateMyQuestion(myQuestion);
+        logger.fatal("收到添加关注请求!!"+myuser_id+"  "+otheruser_id);
         User myuser = loginService.getUserById(myuser_id);
         User otheruser = loginService.getUserById(otheruser_id);
         MyLover myLover = new MyLover(otheruser_id);
@@ -321,21 +335,27 @@ public class UserController {
         session.setAttribute("browseruser",existUser);
         logger.fatal("refreshOther:browserquestionlist的个数是 "+existUser.getItems().size());
         //1表示里面的基本信息,择偶条件,均可见,我问你答tab浏览者已经回答的问题可以直接看答案,否则...
+
         session.setAttribute("type",1);
 //                request.setAttribute("type",1);
         //判断是否已经关注
+        ShiroLoginUtil.login(existUser);//登陆
         if(existUser.isexist(user)!= -1) {
+            int i;
             request.setAttribute("flag", 1);//表明已经关注
+            session.setAttribute("flag",1);
             request.setAttribute("myloverid",existUser.isexist(user));
 
         }else{
             request.setAttribute("flag",0);//没有关注
-//                    request.setAttribute("browseruserid",existUser.getId());
-//                    request.setAttribute("userid",user.getId());
+            session.setAttribute("flag",0);
+            request.setAttribute("myloverid",-1);
         }
-
+        request.setAttribute("browseruserid",existUser.getId());
+        request.setAttribute("userid",user.getId());
 
         return new ModelAndView("pages/other_center");
+
     }
 
 

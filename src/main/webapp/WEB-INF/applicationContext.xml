@@ -118,10 +118,13 @@
         <property name="filterChainDefinitions">
             <value>
                 /weChatOauth=anon
+                /addmylove=anon
+                /deletemylover=anon
                 /resources/**=anon
                 /addquestion=anon
                 /weChatFromChare=anon
                 /pages/other_center=anon
+                /pages/contactme=anon
                 /pages/*=authc
                 /**=authc
             </value>

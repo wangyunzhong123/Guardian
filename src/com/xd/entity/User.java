@@ -260,7 +260,7 @@ public class User {
             if(items.get(i).getId() == id){
                 items.get(i).setUser(null);
                 items.remove(i);
-                System.out.println("删除我的问题index=  "+i);
+                System.out.println("删除我的lover=  "+i);
 
             }
 

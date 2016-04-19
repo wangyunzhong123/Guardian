@@ -202,8 +202,15 @@ public class LoginController {
             session.setAttribute("user",user);
             session.setAttribute("user_to",user_to);
             session.setAttribute("myquestionlist",myQuestionsSet);
+            session.setAttribute("browseruser",null);
             session.setAttribute("type",0);//0表示里面的择偶条件和我问你答tab指向关注引导,
             request.setAttribute("type",0);
+            request.setAttribute("flag", -1);
+            session.setAttribute("flag",-1);
+
+            request.setAttribute("browseruserid",-1);
+            request.setAttribute("userid",-1);
+
             return new ModelAndView("pages/other_center");
         }else{//该用户授权过
             logger.fatal("根据openid获得用户不为空,name= "+existUser.getName()+" id= "+existUser.getId());
@@ -228,16 +235,19 @@ public class LoginController {
                 session.setAttribute("type",1);
 //                request.setAttribute("type",1);
                 //判断是否已经关注
+                ShiroLoginUtil.login(existUser);//登陆
                 if(existUser.isexist(user)!= -1) {
                     request.setAttribute("flag", 1);//表明已经关注
+                    session.setAttribute("flag",1);
                     request.setAttribute("myloverid",existUser.isexist(user));
 
                 }else{
                     request.setAttribute("flag",0);//没有关注
-//                    request.setAttribute("browseruserid",existUser.getId());
-//                    request.setAttribute("userid",user.getId());
+                    session.setAttribute("flag",0);
+                    request.setAttribute("myloverid",-1);
                 }
-
+                request.setAttribute("browseruserid",existUser.getId());
+                request.setAttribute("userid",user.getId());
 
                 return new ModelAndView("pages/other_center");
             }
@@ -340,8 +350,13 @@ public class LoginController {
 
         String url = request.getParameter("url");
         MyCache.url = url;
-        response.getOutputStream().write(MyCache.getInstance().signature.getBytes("utf-8"));
-        logger.fatal("请求的returnSignature,返回 "+MyCache.getInstance().signature+"  url= "+url);
+        //同时返回签名和时间戳
+        MyCache.getInstance().retureSignature();
+        JSONObject object =new JSONObject();
+        object.put("timestamp",MyCache.timestamp);
+        object.put("signature",MyCache.signature);
+        response.getOutputStream().write(object.toString().getBytes("utf-8"));
+        logger.fatal("请求的returnSignature,返回 "+MyCache.signature+"  url= "+url);
 
     }
 

@@ -29,6 +29,7 @@ public class MyCache {
     public static String getTicket_Ticket_Url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
 
     private static String noncestr="sfsdgsdfwet43gds";//随机字符串
+    private static String access_token;
     private static String jsapi_ticket;//
     public static String timestamp = "";//时间戳
 //    public static String url = "http://qbt.feite.org/CupidDaydayOnline_war/getuser";//
@@ -48,7 +49,6 @@ public class MyCache {
                 content.put("appid",appid);
                 content.put("secret",secret);
                 String info1 = HttpUtil.sendGet(getTicket_Access_token_Url,content);
-                String access_token = null;
                 String info2 = null;
                 String temp = null;
                 try {
@@ -67,16 +67,6 @@ public class MyCache {
                 }
                 //
                 jsapi_ticket = temp;
-                timestamp = String.valueOf(System.currentTimeMillis()/1000);
-                //拼接
-                temp = "jsapi_ticket="+jsapi_ticket+
-                        "&noncestr="+noncestr+
-                        "&timestamp="+timestamp+
-                        "&url="+url;
-
-                //得到签名
-                signature = new SHA1().getDigestOfString(temp.getBytes());
-                logger.fatal("获取jssDK的 signature: "+signature);
 
             }
         }, 100, 1000*3600*2);
@@ -85,9 +75,24 @@ public class MyCache {
     private static MyCache myCache = new MyCache();
 
     public static MyCache getInstance(){
-        return myCache;
+        if(myCache != null)
+            return myCache;
+        return new MyCache();
     }
 
+    //动态根据url获取signature
+    public static String retureSignature(){
+        timestamp = String.valueOf(System.currentTimeMillis()/1000);
+        //拼接
+        String temp = "jsapi_ticket="+jsapi_ticket+
+                "&noncestr="+noncestr+
+                "&timestamp="+timestamp+
+                "&url="+url;
+        //得到签名
+        signature = new SHA1().getDigestOfString(temp.getBytes());
+        logger.fatal("获取jssDK的 signature: "+signature);
+        return signature;
+    }
     //测试
 //    public static void main(String[] args) {
 //

@@ -471,6 +471,7 @@
     //微信配置
     //先ajax请求所需的参数
     var sign='';
+    var timestamp='';
     var url = location.href.split('#')[0];
     alert(url);
 //    alert(encodeURIComponent(location.href.split('#')[0]));
@@ -478,23 +479,23 @@
         url:'returnSignature',
         async:false,
         type:'post', //数据发送方式
+        dataType:"json",
         data:"url="+encodeURIComponent(location.href.split('#')[0]), //要传递的数据
         success: function(msg){ //成功
-            sign = msg;
-            alert("成功"+sign);
+            sign = msg.signature;
+            timestamp = msg.timestamp;
+            alert("成功"+sign+"  "+timestamp);
         },
         error: function(){ //失败
            alert('发送ajaxreturnSignature请求失败');
         }
     });
-    <%
-        String timestamp = (String)session.getAttribute("timestamp");
-    %>
-    alert("时间戳= "+<%=timestamp%>);
+
+    alert("时间戳= "+timestamp);
     wx.config({
         debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: 'wx8db58af5e05d7ca6', // 必填，公众号的唯一标识
-        timestamp: '<%=timestamp%>', // 必填，生成签名的时间戳
+        timestamp: timestamp, // 必填，生成签名的时间戳
         nonceStr: 'sfsdgsdfwet43gds', // 必填，生成签名的随机串
         signature: sign,// 必填，签名，见附录1
         jsApiList: [

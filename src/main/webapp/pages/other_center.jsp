@@ -11,7 +11,7 @@
   Time: 下午5:42
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" autoFlush="false" buffer="80kb" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String path=request.getContextPath();
@@ -21,7 +21,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>丘比特天天在线</title>
+    <title>丘比特在线</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
@@ -434,10 +434,11 @@
                 <img src="<%=basePath%>resources/img/smile.jpg" alt="图标" class="tab3_question_img" />
                 <span >${myquestion.myanswer}</span>
                 <%--只有已经关注ta,且回答过的题目才能看到ta的答案--%>
-                <%
-                    Integer flag = Integer.valueOf(request.getParameter("flag"));
+                <%--<%--%>
+                    <%--Integer flag = Integer.valueOf((String)request.getAttribute("flag"));--%>
 
-                %>
+                <%--%>--%>
+
                 <%--<div class="tab3_question_reanswer">--%>
                     <%--<a href="<%=basePath%>editmyquestion?question_prim_id=${myquestion.prim_id}&question_id=${myquestion.id}"--%>
                        <%--class="weui_btn weui_btn_mini weui_btn_primary">重答</a>--%>
@@ -447,16 +448,31 @@
     </div>
 
 </div>
+<%
+    Integer flag = (Integer)session.getAttribute("flag");
+%>
 <%--自我推广按钮--%>
-    <c:if test="${flag == 1}">
+    <c:if test="${ flag == 1}">
         <div class="line_begin_3">
-            <a href="javascript:to_cancelfocus(${myloverid});" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">取消关注</a>
+            <%--<a href="javascript:to_cancelfocus(${myloverid});" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">取消关注</a>--%>
+            <form action="<%=basePath%>deletemylover" method="post">
+                <input type="number" style="display: none" name="myuser_id" value=${browseruserid} />
+                <input type="number" style="display: none" name="otheruser_id" value='<%=user.getId()%>' />
+                <input type="number" style="display: none" name="myloverid" value=${myloverid} />
+                <input type="submit" class="to_adb weui_btn weui_btn_disabled weui_btn_primary" value="取消关注" />
+            </form>
         </div>
     </c:if>
 
     <c:if test="${flag == 0}">
         <div class="line_begin_3">
+            <%--<a href="javascript:to_focus();" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">关注ta</a>--%>
             <a href="javascript:to_focus();" class="to_adb weui_btn weui_btn_disabled weui_btn_primary">关注ta</a>
+            <form action="<%=basePath%>addmylove" method="post">
+                <input type="number" style="display: none" name="myuser_id" value=${browseruserid} />
+                <input type="number" style="display: none" name="otheruser_id" value='<%=user.getId()%>' />
+                <input type="submit" class="to_adb weui_btn weui_btn_disabled weui_btn_primary" value="关注ta" />
+            </form>
         </div>
     </c:if>
 
@@ -498,20 +514,18 @@
 //      'allowMultiple'	: false
 //    });
 
-    })
+    });
 
     function tab_change(which,type){
         var $tab1 = $(document.getElementById("tab11"));
         var $tab2 = $(document.getElementById("tab12"));
         var $tab3 = $(document.getElementById("tab13"));
         if(which!=0 && type ==0){
-            window.location.href = "<%=basePath%>pages/contactme.jsp";
+            alert("which= "+which+"  type= "+type);
+            window.location.href = "contactme.jsp";
             return;
         }
-        if(which!=0 && type ==1){
 
-            return;
-        }
         switch(which){
             case 0:
                 $tab1.show();
@@ -541,13 +555,13 @@
                 url:'deletemylover',
                 type:'post', //数据发送方式
 //                dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json)
-                data:"myuser_id="+'<%=browseruser.getId()%>'+"&otheruser_id"+'<%=user.getId()%>'+"&myloverid="+myloverid, //要传递的数据
-                success: function(msg){ //成功
+                data:"myuser_id="+'${browseruserid}'+"&otheruser_id="+'<%=user.getId()%>'+"&myloverid="+myloverid, //要传递的数据
+//                success: function(msg){ //成功
 //                    alert(msg);
-                },
-                error: function(){ //失败
+//                },
+//                error: function(){ //失败
 //                    alert('失败');
-                }
+//                }
             });
         }
 
@@ -559,13 +573,13 @@
                 url:'addmylove',
                 type:'post', //数据发送方式
 //                dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json)
-                data:"myuser_id="+'<%=browseruser.getId()%>'+"&otheruser_id"+'<%=user.getId()%>', //要传递的数据
-                success: function(msg){ //成功
+                data:"myuser_id="+'${browseruserid}'+"&otheruser_id="+'<%=user.getId()%>', //要传递的数据
+//                success: function(msg){ //成功
 //                    alert(msg);
-                },
-                error: function(){ //失败
+//                },
+//                error: function(){ //失败
 //                    alert('失败');
-                }
+//                }
             });
         }
     }
