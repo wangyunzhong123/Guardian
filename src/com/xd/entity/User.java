@@ -211,11 +211,12 @@ public class User {
     public User() {
     }
 
-    public User(String name, String password, String sex, String address) {
+    public User(String name, String password, String sex, String address,String personimg) {
         this.name = name;
         this.password = password;
         this.sex = sex;
         this.address = address;
+        this.personimg = personimg;
     }
 
 

@@ -92,7 +92,7 @@ public class UserController {
         session.setAttribute("myimglist",myImgList);
         ArrayList imglist = new ArrayList();
         for(int i=0;i<myImgList.size();i++){
-            imglist.add(myImgList.get(i).getUrl());
+            imglist.add("'"+myImgList.get(i).getUrl().toString()+"'");
         }
         session.setAttribute("imglist",imglist);
 

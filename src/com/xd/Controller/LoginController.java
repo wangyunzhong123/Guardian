@@ -115,10 +115,11 @@ public class LoginController {
         String privilege = personInfo.getString("privilege");
 
 //        //测试使用
-//        String openid = "12345";
+//        String openid = "oMkdawD4aAy_QXF0CRC0CPejIqsI";
 //        String nickname = "wang";
 //        String sex = "男";
 //        String city = "北京";
+//        String headimgurl = "http://p4.music.126.net/yNHPFUjS46cRKrKh89_A7Q==/1418370006861727.jpg?param=140y140";
 
         //完成个人信息请求,开始操作数据库
         User existUser=loginService.getUserByKey(openid);
@@ -143,7 +144,7 @@ public class LoginController {
 //            mv.addObject("error", "用户不存在！");
 //            mv.setViewName("login");
             System.out.println("不存在,.");
-            User user1 = new User(nickname,openid,sex,city);
+            User user1 = new User(nickname,openid,sex,city,headimgurl);
             User_to user_to = new User_to();
 
             loginService.addUser(user1);

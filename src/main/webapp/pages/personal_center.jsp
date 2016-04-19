@@ -11,7 +11,7 @@
   Time: 下午5:42
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" autoFlush="false" buffer="512kb"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String path=request.getContextPath();
@@ -218,18 +218,18 @@
             %>
 
             <div class="img-content">
-                <div class="img-content-img"><img class="img-circle " src="<%=basePath%>resources/img/person.png" width="110px" height="90px"></div>
+                <div class="img-content-img"><img class="img-circle " src="${user.personimg}" width="110px" height="90px"></div>
                 <div class="img-content-name"><span>${user.name}</span></div>
                 <div class="img-content-id"><span>${user.id}</span></div>
 
             </div>
             <%--导航栏--%>
             <div width="100%" class="cate_tab">
-                <input id="tab1" type="radio" name="tabs" checked onclick="tab_change(0)">
+                <input id="tab1" type="radio" name="tabs" checked onclick="tab_change(0);">
                 <label for="tab1">基本信息</label>
-                <input id="tab2" type="radio" name="tabs" onclick="tab_change(1)">
+                <input id="tab2" type="radio" name="tabs" onclick="tab_change(1);">
                 <label for="tab2">择偶条件</label>
-                <input id="tab3" type="radio" name="tabs" onclick="tab_change(2)">
+                <input id="tab3" type="radio" name="tabs" onclick="tab_change(2);">
                 <label for="tab3">我问你答</label>
                 <a></a>
             </div>
@@ -245,6 +245,9 @@
                 <a><img id=img-1 class="img-rounded" width="75px" height="75px" src="<%=basePath%>resources/img/person1.jpg"></a>
                 <a><img id=img-2 class="img-rounded" width="75px" height="75px" src="<%=basePath%>resources/img/person2.jpg"></a>
                 <a><img id=img-3 class="img-rounded" width="75px" height="75px" src="<%=basePath%>resources/img/person3.jpg"></a>
+                <%--<a><img id=img-1 class="img-rounded" width="75px" height="75px" src="${imglist[0].url}"></a>--%>
+                <%--<a><img id=img-2 class="img-rounded" width="75px" height="75px" src="${imglist[1].url}"></a>--%>
+                <%--<a><img id=img-3 class="img-rounded" width="75px" height="75px" src="${imglist[2].url}"></a>--%>
             </div>
             <div class="diver_"></div>
             <div class="mycontent">
@@ -489,22 +492,23 @@
         };
 
         //初始化背景图和头像,以及个人图片
+        $(".img-content").css("background-image","url("+'${user.bgimg}'+")");
         <%
                 List<MyImg> myimglist = (List<MyImg>)session.getAttribute("myimglist");
         %>
         //初始化个人照片
         temp = <%=myimglist.size()%> ;
-        if(temp ==1){
-            $("#img-1").attr("src",<%=myimglist.get(0).getUrl()%>);
+        if(temp >=1){
+            $("#img-1").attr("src",${imglist[0]});
         }
-        if(temp ==2){
-            $("#img-1").attr("src",<%=myimglist.get(0).getUrl()%>);
-            $("#img-2").attr("src",<%=myimglist.get(1).getUrl()%>);
+        if(temp >=2){
+            $("#img-1").attr("src",${imglist[0]});
+            $("#img-2").attr("src",${imglist[1]});
         }
-        if(temp ==3){
-            $("#img-1").attr("src",<%=myimglist.get(0).getUrl()%>);
-            $("#img-2").attr("src",<%=myimglist.get(1).getUrl()%>);
-            $("#img-3").attr("src",<%=myimglist.get(2).getUrl()%>);
+        if(temp >=3){
+            $("#img-1").attr("src",${imglist[0]});
+            $("#img-2").attr("src",${imglist[1]});
+            $("#img-3").attr("src",${imglist[2]});
         }
     });
 
@@ -514,7 +518,7 @@
     var sign='';
     var timestamp='';
     var url = location.href.split('#')[0];
-    alert(url);
+//    alert(url);
 //    alert(encodeURIComponent(location.href.split('#')[0]));
     $.ajax({
         url:'returnSignature',
@@ -525,16 +529,16 @@
         success: function(msg){ //成功
             sign = msg.signature;
             timestamp = msg.timestamp;
-            alert("成功"+sign+"  "+timestamp);
+//            alert("成功"+sign+"  "+timestamp);
         },
         error: function(){ //失败
-           alert('发送ajaxreturnSignature请求失败');
+//           alert('发送ajaxreturnSignature请求失败');
         }
     });
 
-    alert("时间戳= "+timestamp);
+//    alert("时间戳= "+timestamp);
     wx.config({
-        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: 'wx8db58af5e05d7ca6', // 必填，公众号的唯一标识
         timestamp: timestamp, // 必填，生成签名的时间戳
         nonceStr: 'sfsdgsdfwet43gds', // 必填，生成签名的随机串
@@ -552,12 +556,12 @@
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
     wx.ready(function(){
-       alert("config成功");
+//       alert("config成功");
         var userid = '<%=user.getId()%>';
         initAllApi(userid);
     });
     wx.error(function(){
-       alert("config失败");
+//       alert("config失败");
     });
 
     //个人推广按钮
@@ -649,7 +653,7 @@
 //                dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json)
             data:"flag="+flag+"&serverId="+serverId, //要传递的数据
             success: function(msg){ //成功
-                alert(msg);
+//                alert(msg);
             },
             error: function(){ //失败
 //                    alert('失败');
