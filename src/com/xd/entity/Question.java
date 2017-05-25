@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+import javax.persistence.Table;
 /**
  * Created by tianxi on 16-3-18.
  */

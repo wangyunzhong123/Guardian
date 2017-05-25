@@ -1,7 +1,7 @@
 package com.xd.entity;
 
 import javax.persistence.*;
-
+import javax.persistence.Table;
 /**
  * Created by tianxi on 16-3-15.
  */

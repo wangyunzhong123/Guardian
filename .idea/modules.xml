@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CupidDaydayOnline.iml" filepath="$PROJECT_DIR$/CupidDaydayOnline.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cupiddaydayonline/cupiddaydayonline.iml" filepath="$PROJECT_DIR$/cupiddaydayonline/cupiddaydayonline.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Guardian.iml" filepath="$PROJECT_DIR$/Guardian.iml" />
     </modules>
   </component>
 </project>
